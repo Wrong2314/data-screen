@@ -1,61 +1,84 @@
 <template>
   <div class="nowTime">
-    <div>统计时间</div>
-    <p class="date">{{ formattedDate }}</p>
+  <div class="demo-datetime-picker">
+    <div class="block">
+      <el-date-picker
+        class="date-picker"  
+       @change="handleChange"
+        v-model="dateInfo"
+        type="daterange"
+        start-placeholder="Start date"
+        end-placeholder="End date"
+        format="YYYY-MM-DD"
+        value-format="YYYY-MM-DD"
+        date-format="YYYY-MM-DD">
+        <template #range-separator>
+          ~
+        </template>
+      </el-date-picker>
+    </div>
   </div>
+  <div class="current-time">
+      {{ currentTime }}
+    </div>
+</div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { onMounted, ref } from "vue";
+import dayjs from "dayjs"; 
+import 'dayjs/locale/zh-cn';
+import { useDateStore } from "@/store/dateStore"; 
 
-const weekdays = [
-  "星期日",
-  "星期一",
-  "星期二",
-  "星期三",
-  "星期四",
-  "星期五",
-  "星期六",
-];
-
-const currentDate = ref(new Date());
-
-const formattedDate = computed(() => {
-  const date = currentDate.value;
-  return `${weekdays[date.getDay()]}${date.getFullYear()}-${String(
-    date.getMonth() + 1
-  ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+const dateInfo = ref(['2024-01-01', '2024-09-09']);
+const currentTime = ref(""); // 定义一个响应式变量来存储当前时间
+const dateStore = useDateStore();
+dayjs.locale('zh-cn'); 
+const updateTime = () => {
+  currentTime.value = dayjs().format("dddd, YYYY-MM-DD"); 
+};
+const handleChange = () => {
+  const targetArr = dateInfo.value;
+  const startTime = targetArr[0];
+  const endTime = targetArr[1];
+  // 更新Pinia store中的状态
+  dateStore.setDates(startTime, endTime);
+};
+onMounted(() => {
+  updateTime(); // 初始化时间
+  setInterval(updateTime, 60_000); 
+  console.log(dateStore.startDate, dateStore.endDate);
 });
-
-setInterval(() => {
-  currentDate.value = new Date();
-}, 60000);
 </script>
 
 <style lang="scss" scoped>
-.nowTime {
-  position: absolute;
+.demo-datetime-picker {
   display: flex;
-  right: 100px;
-  top: 15px;
+  width: 60%;
+  padding: 0;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+.demo-datetime-picker .block {
+  padding: 10px 0;
+  text-align: center;
+}
+.line {
+  width: 1px;
+  background-color: var(--el-border-color);
+}
+.nowTime {
+  width: 36%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 16px;
-
-  .date {
-    font-size: 20px;
-    background-image: linear-gradient(to right, #fe6601, #ff953c, #fc741a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine 3s ease-in-out infinite;
-  }
-
-  @keyframes shine {
-    0% {
-      background-position: 0 0;
-    }
-
-    100% {
-      background-position: 100px 0;
-    }
-  }
+  margin-left: auto;
+}
+.current-time {
+  color: whitesmoke;
+  font-size: 16px;
 }
 </style>
