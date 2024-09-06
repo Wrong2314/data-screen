@@ -14,66 +14,57 @@
       <section>
         <!-- 左侧 -->
         <div class="both-sides left">
-          <!-- 左侧下半部分 第一个图表块 -->
+          <!-- 左侧列表 -->
           <div class="first">
             <!-- 标题 -->
-            <div class="section-small-title">数据安全态势</div>
-            <!--图标 内容 -->
-            <div class="charts">
-              <div>
-                <ChartFirst />
-              </div>
-              <div>
-                <ChartSecond />
-              </div>
+            <div class="section-small-title">
+              <img :src="leftTop" alt="#" />
             </div>
-          </div>
-
-          <!-- 第二个 -->
-          <div class="second">
-            <div class="section-small-title">数据泄露情况统计</div>
             <div class="chart">
-              <ChartCenter />
+              <ChartTop />
             </div>
           </div>
 
-          <!--  第三个-->
-          <div class="third">
-            <div class="section-small-title">威胁等级分析趋势</div>
+          <!-- 左下质效指标 -->
+          <div class="second">
+            <div class="section-small-title">
+              <img :src="leftBottom" alt="#" />
+            </div>
             <div class="chart">
               <ChartBottom />
             </div>
           </div>
         </div>
 
-        <!-- 中间 -->
+        <!-- 指标树 -->
         <div class="center">
           <router-view></router-view>
         </div>
 
         <!-- 右侧 -->
         <div class="both-sides right">
-          <!-- 右侧下半部分 第一个图表块 -->
+          <!-- 右侧顶部 -->
           <div class="first">
-            <!-- 标题 -->
-            <div class="section-small-title">数据监控</div>
-            <!--图标 内容 -->
             <div class="charts">
               <ChartRightTop />
             </div>
           </div>
 
-          <!-- 第二个 -->
+          <!-- 右侧中间 -->
           <div class="second">
-            <div class="section-small-title">系统运行架构展示</div>
+            <div class="section-small-title">
+              <img :src="rightTop" alt="#" />
+            </div>
             <div class="chart">
               <ChartRightCenter />
             </div>
           </div>
 
-          <!--  第三个-->
+          <!-- 右侧底部折线图 -->
           <div class="third">
-            <div class="section-small-title">业务流程概览</div>
+            <div class="section-small-title">
+              <img :src="rightBottom" alt="#" />
+            </div>
             <div class="chart">
               <ChartRightBottom />
             </div>
@@ -91,12 +82,14 @@
  * 屏幕宽度除以设计稿的宽度得到你放大或缩小的比例倍数，用这个倍数在你页面加载的时候先缩放，再将盒子归位
  */
 import { onMounted, ref } from "vue";
+import leftTop from "@/assets/images/title/leftTop.png";
+import leftBottom from "@/assets/images/title/leftBottom.png";
+import rightTop from "@/assets/images/title/rightTop.png";
+import rightBottom from "@/assets/images/title/rightBottom.png";
 
 // 左侧
-import ChartFirst from "./components/comp-chart/comp-left/home-top-first.vue";
-import ChartSecond from "./components/comp-chart/comp-left/home-top-second.vue";
-import ChartCenter from "./components/comp-chart/comp-left/home-center.vue";
-import ChartBottom from "./components/comp-chart/comp-left/home-bottom.vue";
+import ChartTop from "./components/comp-chart/comp-left/home-left-top.vue";
+import ChartBottom from "./components/comp-chart/comp-left/home-left-bottom.vue";
 
 // 右侧
 import ChartRightTop from "./components/comp-chart/comp-right/home-right-top.vue";

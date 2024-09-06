@@ -1,5 +1,5 @@
 <template>
-  <div id="left-center"></div>
+  <div id="left-top"></div>
 </template>
 
 <script setup lang="ts">
@@ -263,15 +263,15 @@ const option = {
 
 onMounted(() => {
   // 使用封装的定时器函数useIntervalFn
-  timerId = useIntervalFn("left-center", echarts, option, 6);
+  timerId = useIntervalFn("left-top", echarts, option, 6);
 });
 
 // 页面离开时销毁echarts实例和监听事件和定时器
-onBeforeUnmount(() => useIntervalDisposeFn("left-center", timerId, echarts));
+onBeforeUnmount(() => useIntervalDisposeFn("left-top", timerId, echarts));
 </script>
 
 <style scoped lang="scss">
-#left-center {
+#left-top {
   width: 100%;
   height: 100%;
 }

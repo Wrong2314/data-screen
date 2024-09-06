@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 
-/* 
+/*
   RouteRecordRaw是Vue Router的一个类型定义，它用于描述路由配置的对象。它包含以下属性：
   path：字符串，表示路由的路径。
   name：字符串，表示路由的名称。
@@ -14,8 +14,6 @@ import app from "../main";
 
 // 引入路由模块
 import noFondPage from "./not-found";
-// 测试路由
-import test from "./modules/test";
 // pinia路由
 import pinia from "./modules/pinia-store";
 
@@ -26,46 +24,12 @@ const routes: Array<RouteRecordRaw> = [
     redirect: "/home",
   },
   {
-    path: "/",
+    path: "/home",
     component: () => import("@/views/home-page/home-page.vue"),
     meta: {
       loading: true,
     },
-    children: [
-      {
-        path: "/home",
-        component: () => import("@/views/home-page/map-china.vue"),
-        meta: {
-          loading: true,
-        },
-      },
-
-      {
-        path: "/province",
-        component: () => import("@/views/home-page/map-province.vue"),
-        meta: {
-          loading: true,
-        },
-      },
-
-      {
-        path: "/city",
-        component: () => import("@/views/home-page/map-city.vue"),
-        meta: {
-          loading: true,
-        },
-      },
-    ],
   },
-  {
-    path: "/about",
-    name: "about",
-    meta: {
-      loading: true,
-    },
-    component: () => import("@/views/about-page/about-page.vue"),
-  },
-  ...test,
   pinia,
   // 404页面需要放在最后！
   noFondPage,
