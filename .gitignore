@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
-!.vscode/extensions.json
+.vscode
 .idea
 .DS_Store
 *.suo
@@ -23,3 +23,6 @@ dist-ssr
 *.sw?
 *.d.ts
 *.yaml
+
+auto-import.d.ts
+components.d.ts

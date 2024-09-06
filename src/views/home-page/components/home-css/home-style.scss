@@ -18,10 +18,8 @@ $color2: #fff;
     width: 1920px;
     height: 1080px;
     background: url(@/assets/images/bg.jpg) no-repeat center center/100% 100%;
-    // filter: brightness(1.1);
     border-radius: 15px;
 
-    // background-color: red;
     // 头部
     header {
       position: relative; //为了定位时间组件
@@ -29,19 +27,6 @@ $color2: #fff;
       height: 100px;
       line-height: 90px;
       font-size: 49px;
-      //color: $color2;
-      //text-align: center;
-      //background: url("@/assets/images/header/title-bg.png") 0 22px/100% no-repeat,
-      //url("@/assets/images/header/guang.png") -150px 45px/100% no-repeat;
-      //animation: breath_light 6s infinite, top 1s linear;
-      //
-      //.title {
-      //  display: block;
-      //  background-image: linear-gradient(to right, $color1, #106b98);
-      //  -webkit-background-clip: text;
-      //  -webkit-text-fill-color: transparent;
-      //  font-size: 46px;
-      //}
     }
 
     // 从上往下

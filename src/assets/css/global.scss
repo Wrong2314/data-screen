@@ -22,19 +22,3 @@
 a {
   cursor: pointer;
 }
-
-/* 地图返回 */
-.iconfont.icon-fanhui {
-  position: absolute;
-  top: 50px;
-  left: 25px;
-  z-index: 9999999;
-  font-size: 25px;
-  cursor: pointer;
-  animation: breath_light 2s infinite;
-  color: #27c4e8;
-
-  &:hover {
-    color: #0093f0;
-  }
-}
