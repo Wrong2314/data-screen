@@ -1,0 +1,217 @@
+// title渐变色阴影
+$color1: #0075ff;
+// 字体颜色
+$color2: #fff;
+
+.container {
+  width: 100%;
+  height: 100%;
+  // background: url(@/assets/images/home-bg.png) no-repeat center center/100% 100%;
+  background: url(@/assets/images/bg.jpg) no-repeat center center/100% 100%;
+  // filter: brightness(0.8);
+
+  .screen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform-origin: left top;
+    width: 1920px;
+    height: 1080px;
+    background-color: rgba(0, 0, 0, 0.4);
+    // filter: brightness(1.1);
+    border-radius: 15px;
+
+    // background-color: red;
+    // 头部
+    header {
+      position: relative; //为了定位时间组件
+      width: 100%;
+      height: 100px;
+      line-height: 90px;
+      font-size: 49px;
+      color: $color2;
+      text-align: center;
+      background: url("@/assets/images/header/title-bg.png") 0 22px/100%
+          no-repeat,
+        url("@/assets/images/header/guang.png") -150px 45px/100% no-repeat;
+      animation: breath_light 6s infinite, top 1s linear;
+
+      .title {
+        display: block;
+        background-image: linear-gradient(to right, $color1, #106b98);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 46px;
+      }
+    }
+
+    // 从上往下
+    @keyframes top {
+      0% {
+        transform: translateY(-100%);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    // 闪烁动画
+    @keyframes breath_light {
+      0% {
+        filter: brightness(100%);
+      }
+
+      50% {
+        filter: brightness(110%);
+      }
+
+      100% {
+        filter: brightness(90%);
+      }
+    }
+
+    // 跳跃动画
+    @keyframes zoomInDown {
+      from {
+        opacity: 0;
+        -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+        transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+        -webkit-animation-timing-function: cubic-bezier(
+          0.55,
+          0.055,
+          0.675,
+          0.19
+        );
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      }
+
+      60% {
+        opacity: 1;
+        -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+        transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+        -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+        animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+      }
+    }
+
+    // 主体
+    section {
+      display: flex;
+      justify-content: space-between;
+      height: calc(100% - 100px);
+
+      // 图表小标题
+      .section-small-title {
+        height: 50px;
+        line-height: 50px;
+        padding-left: 50px;
+        width: 100%;
+        font-size: 25px;
+        background: url(@/assets/images/header/xieyou.png) no-repeat left center,
+          url(@/assets/images/header/guang.png) no-repeat -40px center/100% 100%;
+        color: $color2;
+
+        animation: breath_light 1s infinite, top 1s ease-in-out;
+      }
+
+      .both-sides {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        animation: breath_light 1s infinite;
+
+        // 图表 1 2 3区域
+        .first,
+        .second,
+        .third {
+          flex: 1;
+        }
+
+        .first {
+          .charts {
+            display: flex;
+            width: 100%;
+            // 减去标题的高度
+            height: calc(100% - 50px);
+
+            & > div {
+              flex: 1;
+              // &:nth-child(1) {
+              //   // background-color: #00e1ff;
+              // }
+              // &:nth-child(2) {
+              //   // background-color: #e4f6ff;
+              // }
+            }
+          }
+        }
+
+        .second {
+          .section-small-title {
+            background: url(@/assets/images/header/xieyou.png) no-repeat left
+                center,
+              url(@/assets/images/header/guang.png) no-repeat -4px center/100% 100%;
+          }
+
+          .chart {
+            width: 100%;
+            height: calc(100% - 50px);
+          }
+        }
+
+        .third {
+          .section-small-title {
+            background: url(@/assets/images/header/xieyou.png) no-repeat left
+                center,
+              url(@/assets/images/header/guang.png) no-repeat -4px center/100% 100%;
+          }
+
+          .chart {
+            width: 100%;
+            height: calc(100% - 50px);
+          }
+        }
+      }
+
+      .left {
+        // 从左到右进入动画
+        animation: both-sides-left 1.5s;
+      }
+
+      @keyframes both-sides-left {
+        from {
+          transform: translateX(-100%);
+        }
+
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      .right {
+        // 从右到左进入动画
+        animation: both-sides-right 1.5s;
+      }
+
+      // 从右到左进入动画
+      @keyframes both-sides-right {
+        from {
+          transform: translateX(100%);
+        }
+
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      // 中间区域
+      .center {
+        position: relative;
+        flex: 2;
+        animation: zoomInDown 1s linear;
+        overflow: hidden;
+      }
+    }
+  }
+}

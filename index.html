@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>天天银行大屏态势总览</title>
+    <style>
+      @font-face {
+        /* 注意重命名字体名称要和字体包名称一样*/
+        font-family: "pmzdbtt3.0";
+        /* 必须使用相对路径 不然字蛛压缩报错 web fond font*/
+        src: url("./pmzdbtt3.0.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      .title {
+        /* vue是单页面应用所以弊端就是他会显示到你的页面上 */
+        /* 隐藏了之后，所有的title类名都会隐藏，要在真正显示的地方加上display:block使其显示 */
+        display: none;
+        font-family: "pmzdbtt3.0";
+      }
+    </style>
+  </head>
+
+  <body>
+    <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
+
+    <div class="title">天津银行数据安全综合态势平台优 1234567890</div>
+    <script type="module" src="/src/main.ts"></script>
+    <div id="app"></div>
+  </body>
+</html>

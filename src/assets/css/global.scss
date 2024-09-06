@@ -1,0 +1,40 @@
+/* 是一个CSS属性，表示元素的盒模型应该包括边框和内边距，并且宽度不会被边框和内边距增加。
+  ------------------------------------------------------------------------------------------------ */
+* {
+  box-sizing: border-box;
+}
+
+@keyframes breath_light {
+  0% {
+    filter: brightness(100%);
+  }
+
+  50% {
+    filter: brightness(80%);
+    transform: scale(1.1);
+  }
+
+  100% {
+    filter: brightness(120%);
+  }
+}
+
+a {
+  cursor: pointer;
+}
+
+/* 地图返回 */
+.iconfont.icon-fanhui {
+  position: absolute;
+  top: 50px;
+  left: 25px;
+  z-index: 9999999;
+  font-size: 25px;
+  cursor: pointer;
+  animation: breath_light 2s infinite;
+  color: #27c4e8;
+
+  &:hover {
+    color: #0093f0;
+  }
+}
