@@ -97,7 +97,9 @@ onMounted(() => {
   // 封装优化请求,请求的时候存本地且不过期,就使用本地数据,否则重新请求,
   //在页面加载调用一下这个函数,不去直接调用getType请求接口
   //  判断本地有没有数据
-  const cates = JSON.parse(localStorage.getItem("locationInfo") || "");
+  const cates = localStorage.getItem("locationInfo")
+    ? JSON.parse(localStorage.getItem("locationInfo") || "")
+    : {};
   if (!cates) {
     // 如果本地没有cates,就网络请求数据
     getInfoFn();
