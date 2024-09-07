@@ -19,7 +19,7 @@
               <img :src="TitleLeftTop" alt="#" />
             </div>
             <div class="chart">
-              <!-- <ChartLeftTop /> -->
+              <ChartLeftTop />
             </div>
           </div>
 
@@ -82,7 +82,7 @@
   import TitleRightBottom from "@/assets/images/title/right-bottom.png";
 
   import HomeTime from "@/views/home-page/components/comp-time/home-time.vue";
-  // import ChartLeftTop from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
+  import ChartLeftTop from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
   import ChartLeftBottom from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
   import ChartRightTop from "@/views/home-page/components/comp-chart/comp-right/home-right-top.vue";
   import ChartRightCenter from "@/views/home-page/components/comp-chart/comp-right/home-right-center.vue";

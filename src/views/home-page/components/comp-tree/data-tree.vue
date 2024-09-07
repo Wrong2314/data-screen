@@ -1,18 +1,15 @@
 <template>
   <div class="indicator-container">
-    <!-- 指标展示区域 -->
     <div class="indicator-display">
       <div class="row" v-for="(row, index) in displayedRows" :key="index">
-        <div class="indicator" v-for="indicator in row" :key="indicator.indicatorId">{{ indicator.name }} {{ indicator.value }}</div>
+        <!-- 添加点击事件监听 -->
+        <div class="indicator" v-for="indicator in row" :key="indicator.indicatorId" @click="handleIndicatorClick(indicator)">{{ indicator.name }} {{ indicator.value }}</div>
       </div>
     </div>
-    <!-- 分页控制 -->
     <div class="pagination-controls">
       <button @click="prevPage">←</button>
       <button @click="nextPage">→</button>
     </div>
-    <!-- 底部展示区域 -->
-
     <div class="indicator-zoom">
       <div v-if="pageData.activeIndicator">{{ pageData.activeIndicator.name }} {{ pageData.activeIndicator.value }}</div>
       <div v-else-if="pageData.indicators.length > 0">{{ pageData.indicators[0].name }}{{ pageData.indicators[0].value }}</div>
@@ -53,25 +50,9 @@
     return rows;
   });
 
-  // 获取指标数据
   function fetchIndicators() {
-    const mockData: IData[] = [
-      // 确保每个指标的indicatorId是唯一的
-      { indicatorId: "aaa", name: "aaa", value: 10 },
-      { indicatorId: "bbb", name: "bbb", value: 10 },
-      { indicatorId: "ccc", name: "ccc", value: 10 },
-      { indicatorId: "ddd", name: "ddd", value: 10 },
-      { indicatorId: "eee", name: "eee", value: 10 },
-      { indicatorId: "fff", name: "fff", value: 10 },
-      { indicatorId: "ggg", name: "ggg", value: 10 },
-      { indicatorId: "hhh", name: "hhh", value: 10 },
-      { indicatorId: "iii", name: "iii", value: 10 },
-      { indicatorId: "jjj", name: "jjj", value: 10 },
-      { indicatorId: "kkk", name: "kkk", value: 10 },
-      { indicatorId: "lll", name: "lll", value: 10 },
-      { indicatorId: "mmm", name: "mmm", value: 10 },
-    ];
-    pageData.indicators = mockData; // 从API获取数据并赋值
+    // 假设 treeData 的结构与之前的 mockData 类似
+    pageData.indicators = store.treeData; // 从 Pinia store 的 treeData 获取数据并赋值
   }
 
   // 上一页
@@ -92,6 +73,12 @@
   function selectIndicator(indicator: IData) {
     pageData.activeIndicator = indicator;
   }
+  // 点击指标项时的处理函数
+  function handleIndicatorClick(indicator: IData) {
+    selectIndicator(indicator); // 设置当前选中的指标项
+    store.fetchIndicatorAnalysisData(indicator.indicatorId); // 调用store的方法更新全局数据
+  }
+  //todo: 后面放到home进行
   onMounted(() => {
     fetchIndicators();
   });
@@ -113,6 +100,7 @@
     padding: 10px;
     margin: 5px;
     border: 1px solid #ccc;
+    color: white;
   }
 
   .pagination-controls {
@@ -120,6 +108,8 @@
   }
 
   .indicator-zoom {
+    font-size: 20px;
+    color: azure;
     margin-top: 20px;
     font-size: 20px;
   }
