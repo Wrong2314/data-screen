@@ -1,7 +1,7 @@
 <template>
   <div class="left-bottom">
     <div v-for="(item, index) in list" :key="index">
-      <div class="value-container">
+      <div class="value-container" @click="handleLevelItemClick(item.label)">
         <div class="value-bg">
           <span class="value">{{ item.value }}</span>
         </div>
@@ -12,15 +12,45 @@
 </template>
 
 <script setup lang="ts">
-  export interface LevelDataItem {
+  import { useDataStore } from "@/store/dataStore";
+  import { computed, reactive, watch } from "vue";
+
+  export interface ILevelDataItem {
     name: string;
     indicatorIds: string[];
   }
-  const list = [
-    { label: "优于合理区间", value: 3 },
-    { label: "处于/无合理区间", value: 3 },
-    { label: "劣于合理区间", value: 3 },
-  ];
+  const store = useDataStore();
+  watch(
+    () => store.levelData,
+    newData => {
+      console.log("newD", newData);
+      fetchLevelData(newData);
+    }
+  );
+  let pageData = reactive<ILevelDataItem[]>([]);
+
+  const list = computed(() =>
+    pageData.map(item => {
+      return { label: item.name, value: item.indicatorIds.length };
+    })
+  );
+  function fetchLevelData(data: ILevelDataItem[]) {
+    // 先清空数组
+    pageData.splice(0, pageData.length);
+    // 再添加新数据
+    data.forEach(item => pageData.push(item));
+  }
+
+  const handleLevelItemClick = (value: string) => {
+    // 在pageData中查找与value匹配的name属性的项
+    const selectedItem = pageData.find(item => item.name === value);
+    if (selectedItem) {
+      const indicatorIds = selectedItem.indicatorIds;
+      store.setHighLightTreeDataArr(indicatorIds);
+    } else {
+      console.error("未找到匹配的项");
+    }
+  };
 </script>
 
 <style scoped lang="scss">

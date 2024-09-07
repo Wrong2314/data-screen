@@ -1,4 +1,4 @@
-import { LevelDataItem } from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
+import { ILevelDataItem } from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
 import { IAnalysisData } from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
 import { IData } from "@/views/home-page/components/comp-tree/data-tree.vue";
 import axios from "axios";
@@ -8,13 +8,14 @@ export const useDataStore = defineStore("data", {
   state: () => ({
     startDate: "2024-01-01",
     endDate: "2024-09-09",
-    activeTreeData: {},
-    indicatorAnalysisData: {} as IAnalysisData,
-    treeData: [] as IData[],
-    levelData: [] as LevelDataItem[],
-    indicatorDetailData: {},
-    bizLineData: {},
-    timeLineData: {},
+    activeTreeData: {}, //当前选中的tree指标
+    indicatorAnalysisData: {} as IAnalysisData, //当前的xx分析信息
+    treeData: [] as IData[], //当前条件全部tree指标
+    levelData: [] as ILevelDataItem[], //当前条件level信息
+    indicatorDetailData: {}, //右上角指标详情
+    bizLineData: {}, //业务条线
+    timeLineData: {}, //时间趋势
+    highLightTreeDataIdArr: [] as string[], //需要高亮展示的指标id
   }),
   actions: {
     setDates(start: string, end: string) {
@@ -24,8 +25,12 @@ export const useDataStore = defineStore("data", {
     setActiveTreeData(data: IData) {
       this.activeTreeData = data;
     },
+    setHighLightTreeDataArr(dataArr: string[]) {
+      this.highLightTreeDataIdArr = dataArr;
+    },
     // 测试用
     async initMockData() {
+      //后面换成真实接口~
       setTimeout(() => {
         this.indicatorAnalysisData = {
           indicatorName: "达标率", //指标名称
@@ -76,15 +81,15 @@ export const useDataStore = defineStore("data", {
         ];
         this.levelData = [
           {
-            name: "优", //展示名称，如：优于合理区间、处于/无合理区间、劣于合理区间
+            name: "优于合理区间", //展示名称，如：优于合理区间、处于/无合理区间、劣于合理区间
             indicatorIds: ["aaa", "bbb"], //满足当前区间的指标id，用于点击时联动中间指标树的高亮显示
           },
           {
-            name: "处", //展示名称，如：优于合理区间、处于/无合理区间、劣于合理区间
+            name: "处于/无合理区间", //展示名称，如：优于合理区间、处于/无合理区间、劣于合理区间
             indicatorIds: ["ccc"], //满足当前区间的指标id，用于点击时联动中间指标树的高亮显示
           },
           {
-            name: "劣", //展示名称，如：优于合理区间、处于/无合理区间、劣于合理区间
+            name: "劣于合理区间", //展示名称，如：优于合理区间、处于/无合理区间、劣于合理区间
             indicatorIds: ["ddd", "eee", "fff"], //满足当前区间的指标id，用于点击时联动中间指标树的高亮显示
           },
         ];

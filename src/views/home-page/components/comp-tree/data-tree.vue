@@ -3,14 +3,7 @@
     <div class="indicator-display">
       <div class="row" v-for="(row, index) in displayedRows" :key="index">
         <!-- 添加点击事件监听 -->
-        <div
-          class="indicator"
-          v-for="indicator in row"
-          :key="indicator.indicatorId"
-          @click="handleIndicatorClick(indicator)"
-        >
-          {{ indicator.name }} {{ indicator.value }}
-        </div>
+        <div class="indicator" v-for="indicator in row" :key="indicator.indicatorId" @click="handleIndicatorClick(indicator)">{{ indicator.name }} {{ indicator.value }}</div>
       </div>
     </div>
     <div class="pagination-controls">
@@ -19,9 +12,7 @@
     </div>
     <div class="indicator-zoom">
       <div v-if="pageData.activeIndicator">{{ pageData.activeIndicator.name }} {{ pageData.activeIndicator }}</div>
-      <div v-else-if="pageData.indicators.length > 0">
-        {{ pageData.indicators[0].name }}{{ pageData.indicators[0].value }}
-      </div>
+      <div v-else-if="pageData.indicators.length > 0">{{ pageData.indicators[0].name }}{{ pageData.indicators[0].value }}</div>
     </div>
   </div>
 </template>
@@ -39,20 +30,42 @@
     activeIndicator: IData | null;
     currentPage: number;
     pageSize: number;
+    highLightTreeDataArr: IData[];
   }
   const pageData = reactive<IPageData>({
     indicators: [], // 存储指标数据
     activeIndicator: null, //当前选中的指标
     currentPage: 0, // 当前页码
     pageSize: 16, // 每页显示的指标数（8行，每行2个）
+    highLightTreeDataArr: [],
   });
   const store = useDataStore();
+  //更新当前treeData指标
   watch(
     () => store.treeData,
     newData => {
       fetchIndicators(newData);
     }
   );
+
+  //更新当前treeData需要高亮的指标
+  watch(
+    () => store.highLightTreeDataIdArr,
+    newData => {
+      pageData.highLightTreeDataArr = [];
+      // 遍历新的高亮指标ID数组
+      newData.forEach(id => {
+        // 在所有指标中查找匹配的指标ID
+        const foundIndicator = pageData.indicators.find(indicator => indicator.indicatorId === id);
+        // 如果找到了匹配的指标，将其添加到高亮指标数组中
+        if (foundIndicator) {
+          pageData.highLightTreeDataArr.push(foundIndicator);
+        }
+      });
+      console.log("highLightTreeDataArr", pageData.highLightTreeDataArr);
+    }
+  );
+
   // 使用computed创建计算属性
   const displayedRows = computed(() => {
     const start = pageData.currentPage * pageData.pageSize;
