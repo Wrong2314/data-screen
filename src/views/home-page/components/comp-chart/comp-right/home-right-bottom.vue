@@ -3,43 +3,21 @@
 </template>
 
 <script setup lang="ts">
+  import { computed, reactive, watch } from "vue";
   import { useDataStore } from "@/store/dataStore";
-  import { reactive, watch } from "vue";
-  export interface IDetailData {
-    indicatorName: string; //指标名称
-    value: string; //指标值 最多小数点后4位
-    rank: string; //排名 最多2位
-    reasonableRange: string; //合理区间
-    avgValue: {
-      name: string; //名称
-      value: string; //值
-    }; //XX平均值
-    bestVo: {
-      name: string; //名称
-      value: string; //值
-    };
+  export interface ITimeLineData {
+    name: string; //业务条线名称
+    value: string; //值
   }
-  let pageData = reactive<IDetailData>({
-    indicatorName: "", //指标名称
-    value: "", //指标值 最多小数点后4位
-    rank: "", //排名 最多2位
-    reasonableRange: "", //合理区间
-    avgValue: {
-      name: "", //名称
-      value: "", //值
-    }, //XX平均值
-    bestVo: {
-      name: "", //名称
-      value: "", //值
-    },
-  });
+  let pageData = reactive<ITimeLineData[]>([]);
+
   const store = useDataStore();
   watch(
     () => store.activeTreeData,
     newData => {
       const { indicatorId } = newData;
       const areaId = store.indicatorAnalysisData.topShowIndicator?.code ?? "";
-      store.fetchDetailData(indicatorId, areaId);
+      store.fetchTimeLine(indicatorId, areaId);
     }
   );
   watch(
@@ -47,24 +25,27 @@
     newData => {
       const areaId = newData.topShowIndicator?.code ?? "";
       const { indicatorId } = store.activeTreeData;
-      store.fetchDetailData(indicatorId, areaId);
+      store.fetchTimeLine(indicatorId, areaId);
     }
   );
   watch(
-    () => store.indicatorDetailData,
+    () => store.bizLineData,
     newData => {
-      setDetailData(newData);
+      setTimeLineData(newData);
     }
   );
-  function setDetailData(data: IDetailData) {
-    pageData.value = data.value;
-    pageData.reasonableRange = data.reasonableRange;
-    pageData.rank = data.rank;
-    pageData.indicatorName = data.indicatorName;
-    pageData.bestVo = data.bestVo;
-    pageData.avgValue = data.avgValue;
+  function setTimeLineData(ITimeLineDataArr: ITimeLineData[]) {
+    // 先清空数组
+    pageData.splice(0, pageData.length);
+    // 再添加新数据
+    ITimeLineDataArr.forEach(item => pageData.push(item));
   }
   //todo: pageData数据转换 成 表格
+  const transList = computed(() => {
+    pageData.map(item => {
+      return {};
+    });
+  });
   let data: number[] = [300, 400, 350, 250, 320, 450, 500, 450, 280, 200, 230, 280];
   let data1: number[] = [180, 200, 350, 500, 400, 350, 220, 280, 420, 380, 350, 400];
 
