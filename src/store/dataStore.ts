@@ -1,6 +1,7 @@
 import { ILevelDataItem } from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
 import { IAnalysisData } from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
 import { IDetailData } from "@/views/home-page/components/comp-chart/comp-right/home-right-bottom.vue";
+import { IBizLineData } from "@/views/home-page/components/comp-chart/comp-right/home-right-center.vue";
 import { IData } from "@/views/home-page/components/comp-tree/data-tree.vue";
 import axios from "axios";
 import { defineStore } from "pinia";
@@ -14,7 +15,7 @@ export const useDataStore = defineStore("data", {
     treeData: [] as IData[], //当前条件全部tree指标
     levelData: [] as ILevelDataItem[], //当前条件level信息
     indicatorDetailData: {} as IDetailData, //右上角指标详情
-    bizLineData: {}, //业务条线
+    bizLineData: {} as IBizLineData[], //业务条线
     timeLineData: {}, //时间趋势
     highLightTreeDataIdArr: [] as string[], //需要高亮展示的指标id
   }),

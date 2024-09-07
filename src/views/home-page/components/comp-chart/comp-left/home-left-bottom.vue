@@ -23,7 +23,6 @@
   watch(
     () => store.levelData,
     newData => {
-      console.log("newD", newData);
       setLevelData(newData);
     }
   );

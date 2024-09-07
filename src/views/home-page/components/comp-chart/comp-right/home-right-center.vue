@@ -28,7 +28,51 @@
 <script setup lang="ts">
   import up from "@/assets/images/right/up.png";
   import down from "@/assets/images/right/down.png";
+  import { computed, reactive, watch } from "vue";
+  import { useDataStore } from "@/store/dataStore";
+  export interface IBizLineData {
+    name: string; //业务条线名称
+    value: string; //值
+    yoyValue: string; //同比值
+    qoqValue: string; //环比值
+  }
+  let pageData = reactive<IBizLineData[]>([]);
 
+  const store = useDataStore();
+  watch(
+    () => store.activeTreeData,
+    newData => {
+      const { indicatorId } = newData;
+      const areaId = store.indicatorAnalysisData.topShowIndicator?.code ?? "";
+      store.fetchBizLine(indicatorId, areaId);
+    }
+  );
+  watch(
+    () => store.indicatorAnalysisData,
+    newData => {
+      const areaId = newData.topShowIndicator?.code ?? "";
+      const { indicatorId } = store.activeTreeData;
+      store.fetchBizLine(indicatorId, areaId);
+    }
+  );
+  watch(
+    () => store.bizLineData,
+    newData => {
+      setBizLineData(newData);
+    }
+  );
+  function setBizLineData(IBizLineDataArr: IBizLineData[]) {
+    // 先清空数组
+    pageData.splice(0, pageData.length);
+    // 再添加新数据
+    IBizLineDataArr.forEach(item => pageData.push(item));
+  }
+  //todo: 数据转换
+  const transList = computed(() => {
+    pageData.map(item => {
+      return { label: item.name, value: item.value };
+    });
+  });
   const list = [
     { label: "刑事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
     { label: "民事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: true },
@@ -91,13 +135,7 @@
       height: 100%;
       z-index: -1;
 
-      background: linear-gradient(
-        to bottom,
-        rgba(67, 154, 248, 0.2) 0%,
-        rgba(67, 154, 248, 0) 5%,
-        rgba(67, 154, 248, 0) 95%,
-        rgba(67, 154, 248, 0.2) 100%
-      );
+      background: linear-gradient(to bottom, rgba(67, 154, 248, 0.2) 0%, rgba(67, 154, 248, 0) 5%, rgba(67, 154, 248, 0) 95%, rgba(67, 154, 248, 0.2) 100%);
     }
   }
 
