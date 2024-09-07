@@ -11,7 +11,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+  export interface LevelDataItem {
+    name: string;
+    indicatorIds: string[];
+  }
   const list = [
     { label: "优于合理区间", value: 3 },
     { label: "处于/无合理区间", value: 3 },

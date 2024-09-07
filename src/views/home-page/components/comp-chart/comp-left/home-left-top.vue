@@ -60,10 +60,8 @@
   }
   const handleRankInfoClick = (areaId: string) => {
     store.fetchTreeData(areaId);
+    store.fetchLevelData(areaId);
   };
-  onMounted(() => {
-    fetchIndicatorAnalysisData(store.indicatorAnalysisData);
-  });
 </script>
 
 <style scoped>

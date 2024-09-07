@@ -18,7 +18,7 @@
 </template>
 <script setup lang="ts">
   import { useDataStore } from "@/store/dataStore";
-  import { onMounted, reactive, computed } from "vue";
+  import { onMounted, reactive, computed, watch } from "vue";
 
   export interface IData {
     indicatorId: string;
@@ -38,6 +38,12 @@
     pageSize: 16, // 每页显示的指标数（8行，每行2个）
   });
   const store = useDataStore();
+  watch(
+    () => store.treeData,
+    newData => {
+      fetchIndicators(newData);
+    }
+  );
   // 使用computed创建计算属性
   const displayedRows = computed(() => {
     const start = pageData.currentPage * pageData.pageSize;
@@ -50,9 +56,9 @@
     return rows;
   });
 
-  function fetchIndicators() {
+  function fetchIndicators(data: IData[]) {
     // 假设 treeData 的结构与之前的 mockData 类似
-    pageData.indicators = store.treeData; // 从 Pinia store 的 treeData 获取数据并赋值
+    pageData.indicators = data; // 从 Pinia store 的 treeData 获取数据并赋值
   }
 
   // 上一页
@@ -79,10 +85,6 @@
     store.setActiveTreeData(indicator);
     store.fetchIndicatorAnalysisData(indicator.indicatorId); // 调用store的方法更新全局数据
   }
-  //todo: 后面放到home进行
-  onMounted(() => {
-    fetchIndicators();
-  });
 </script>
 
 <style scoped>
