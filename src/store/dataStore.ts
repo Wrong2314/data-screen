@@ -1,3 +1,4 @@
+import { IData } from "@/views/home-page/components/comp-tree/data-tree.vue";
 import axios from "axios";
 import { defineStore } from "pinia";
 
@@ -5,6 +6,7 @@ export const useDataStore = defineStore("data", {
   state: () => ({
     startDate: "2024-01-01",
     endDate: "2024-09-09",
+    activeTreeData: {},
     indicatorAnalysisData: {
       indicatorName: "达标率", //指标名称
       topShowIndicator: {
@@ -62,6 +64,9 @@ export const useDataStore = defineStore("data", {
       this.startDate = start;
       this.endDate = end;
     },
+    setActiveTreeData(data: IData) {
+      this.activeTreeData = data;
+    },
     //点击tree指标更新全局数据
     async fetchIndicatorAnalysisData(indicatorId?: string) {
       try {
@@ -71,6 +76,7 @@ export const useDataStore = defineStore("data", {
         console.error("fetchIndicatorAnalysisData failed:", error);
       }
     },
+    //点击排名列表项更新全局数据
     async fetchTreeData(areaId?: string) {
       try {
         const response = await axios.get(`/api/v1/spzx/indicator_tree?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`);
@@ -79,6 +85,7 @@ export const useDataStore = defineStore("data", {
         console.error("fetchTreeData failed:", error);
       }
     },
+    //点击排名列表项更新全局数据
     async fetchLevelData(areaId?: string) {
       try {
         const response = await axios.get(`/api/v1/spzx/zxzbqk?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`);
@@ -87,6 +94,7 @@ export const useDataStore = defineStore("data", {
         console.error("fetchLevelData failed:", error);
       }
     },
+    //点击排名列表项更新全局数据
     async fetchDetailData(indicatorId?: string, areaId?: string) {
       try {
         const response = await axios.get(`/api/v1/spzx/indicator_info?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`);

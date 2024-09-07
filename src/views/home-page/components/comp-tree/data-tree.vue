@@ -76,6 +76,7 @@
   // 点击指标项时的处理函数
   function handleIndicatorClick(indicator: IData) {
     selectIndicator(indicator); // 设置当前选中的指标项
+    store.setActiveTreeData(indicator);
     store.fetchIndicatorAnalysisData(indicator.indicatorId); // 调用store的方法更新全局数据
   }
   //todo: 后面放到home进行
