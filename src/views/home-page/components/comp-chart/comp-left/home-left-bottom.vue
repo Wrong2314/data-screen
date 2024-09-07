@@ -24,6 +24,7 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    padding: 20px 0;
 
     .value-container {
       display: flex;
@@ -52,6 +53,7 @@
 
       .label {
         margin-top: 5px;
+        padding: 5px 0;
         font-size: 12px;
         line-height: 20px;
         color: #fff;

@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive } from "vue";
+  import { onMounted, reactive, watch } from "vue";
   import { useDataStore } from "@/store/dataStore";
   export interface IAnalysisData {
     indicatorName: string;
@@ -45,8 +45,14 @@
   });
   const store = useDataStore();
 
-  function fetchIndicatorAnalysisData() {
-    const data = store.indicatorAnalysisData; // 从 Pinia store 获取数据
+  watch(
+    () => store.indicatorAnalysisData,
+    newData => {
+      fetchIndicatorAnalysisData(newData);
+    }
+  );
+
+  function fetchIndicatorAnalysisData(data: IAnalysisData) {
     // 更新 pageData 的属性
     pageData.indicatorName = data.indicatorName;
     pageData.topShowIndicator = data.topShowIndicator;
@@ -56,7 +62,7 @@
     store.fetchTreeData(areaId);
   };
   onMounted(() => {
-    fetchIndicatorAnalysisData();
+    fetchIndicatorAnalysisData(store.indicatorAnalysisData);
   });
 </script>
 

@@ -8,7 +8,7 @@
         </template>
       </el-progress>
       <div class="progress-desc">
-        <div class="label">{{ item.label }}</div>
+        <div class="progress-color">{{ item.label }}</div>
         <div class="value">
           <span class="value-label">同比</span>
           <span :class="item.type ? 'up' : 'down'">{{ item.lastMonth }}</span>
@@ -27,11 +27,12 @@
 <script setup lang="ts">
   import up from "@/assets/images/right/up.png";
   import down from "@/assets/images/right/down.png";
+
   const list = [
     { label: "刑事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
-    { label: "刑事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: true },
-    { label: "刑事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
-    { label: "刑事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
+    { label: "民事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: true },
+    { label: "行政", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
+    { label: "其他", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
   ];
 </script>
 
@@ -45,9 +46,9 @@
 
   .progress-container {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-    width: 50%;
+    width: calc(50% - 15px);
 
     .progress-color {
       background: linear-gradient(to bottom, #fff, #56c8ed);
@@ -61,6 +62,7 @@
       font-size: 25px;
       color: #ffffff;
     }
+
     .progress-unit {
       font-size: 12px;
       color: #ffffff;
@@ -71,13 +73,33 @@
       flex-direction: column;
       justify-content: space-evenly;
       align-items: flex-start;
-      padding: 20px 0;
+      padding: 10px 20px;
+      position: relative;
 
       .value-label {
         color: #fff;
       }
     }
+
+    .progress-desc::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -30px;
+      width: 130%;
+      height: 100%;
+      z-index: -1;
+
+      background: linear-gradient(
+        to bottom,
+        rgba(67, 154, 248, 0.2) 0%,
+        rgba(67, 154, 248, 0) 10%,
+        rgba(67, 154, 248, 0) 90%,
+        rgba(67, 154, 248, 0.2) 100%
+      );
+    }
   }
+
   .up {
     color: #cf8c46;
   }

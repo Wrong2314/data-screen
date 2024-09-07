@@ -13,8 +13,7 @@
         <!-- 左侧 -->
         <div class="both-sides left">
           <!-- 左侧列表 -->
-          <div class="first">
-            <!-- 标题 -->
+          <div class="sides-item">
             <div class="section-small-title">
               <img :src="TitleLeftTop" alt="#" />
             </div>
@@ -24,7 +23,7 @@
           </div>
 
           <!-- 左下质效指标 -->
-          <div class="second">
+          <div class="bottom">
             <div class="section-small-title">
               <img :src="TitleLeftBottom" alt="#" />
             </div>
@@ -42,14 +41,14 @@
         <!-- 右侧 -->
         <div class="both-sides right">
           <!-- 右侧顶部 -->
-          <div class="first">
+          <div class="sides-item">
             <div class="charts">
               <ChartRightTop />
             </div>
           </div>
 
           <!-- 右侧中间 -->
-          <div class="second">
+          <div class="sides-item">
             <div class="section-small-title">
               <img :src="TitleRightCenter" alt="#" />
             </div>
@@ -59,7 +58,7 @@
           </div>
 
           <!-- 右侧底部折线图 -->
-          <div class="third">
+          <div class="sides-item">
             <div class="section-small-title">
               <img :src="TitleRightBottom" alt="#" />
             </div>
