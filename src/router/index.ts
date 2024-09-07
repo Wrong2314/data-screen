@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import noFondPage from "./not-found";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,7 +12,6 @@ const routes: Array<RouteRecordRaw> = [
       loading: true,
     },
   },
-  noFondPage,
 ];
 
 const router = createRouter({
