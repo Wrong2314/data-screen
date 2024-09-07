@@ -7,6 +7,7 @@
           <span class="progress-unit progress-color">%</span>
         </template>
       </el-progress>
+
       <div class="progress-desc">
         <div class="progress-color">{{ item.label }}</div>
         <div class="value">
@@ -93,8 +94,8 @@
       background: linear-gradient(
         to bottom,
         rgba(67, 154, 248, 0.2) 0%,
-        rgba(67, 154, 248, 0) 10%,
-        rgba(67, 154, 248, 0) 90%,
+        rgba(67, 154, 248, 0) 5%,
+        rgba(67, 154, 248, 0) 95%,
         rgba(67, 154, 248, 0.2) 100%
       );
     }

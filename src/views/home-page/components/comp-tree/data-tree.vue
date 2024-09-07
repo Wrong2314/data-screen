@@ -3,22 +3,31 @@
     <div class="indicator-display">
       <div class="row" v-for="(row, index) in displayedRows" :key="index">
         <!-- 添加点击事件监听 -->
-        <div class="indicator" v-for="indicator in row" :key="indicator.indicatorId" @click="handleIndicatorClick(indicator)">{{ indicator.name }} {{ indicator.value }}</div>
+        <div
+          class="indicator"
+          v-for="indicator in row"
+          :key="indicator.indicatorId"
+          @click="handleIndicatorClick(indicator)"
+        >
+          {{ indicator.name }} {{ indicator.value }}
+        </div>
       </div>
     </div>
     <div class="pagination-controls">
-      <button @click="prevPage">←</button>
-      <button @click="nextPage">→</button>
+      <el-button @click="prevPage">←</el-button>
+      <el-button @click="nextPage">→</el-button>
     </div>
     <div class="indicator-zoom">
-      <div v-if="pageData.activeIndicator">{{ pageData.activeIndicator.name }} {{ pageData.activeIndicator.value }}</div>
-      <div v-else-if="pageData.indicators.length > 0">{{ pageData.indicators[0].name }}{{ pageData.indicators[0].value }}</div>
+      <div v-if="pageData.activeIndicator">{{ pageData.activeIndicator.name }} {{ pageData.activeIndicator }}</div>
+      <div v-else-if="pageData.indicators.length > 0">
+        {{ pageData.indicators[0].name }}{{ pageData.indicators[0].value }}
+      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
   import { useDataStore } from "@/store/dataStore";
-  import { onMounted, reactive, computed, watch } from "vue";
+  import { reactive, computed, watch } from "vue";
 
   export interface IData {
     indicatorId: string;
@@ -114,6 +123,5 @@
     font-size: 20px;
     color: azure;
     margin-top: 20px;
-    font-size: 20px;
   }
 </style>

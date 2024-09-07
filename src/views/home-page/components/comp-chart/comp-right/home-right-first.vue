@@ -5,9 +5,9 @@
       <span class="value-unit">%</span>
     </div>
     <div class="label">达标率</div>
-    <div class="range">
-      <span class="range-label">排名</span>
-      <span class="range-value value-color">1</span>
+    <div class="rank">
+      <span class="rank-label">排名</span>
+      <span class="rank-value value-color">1</span>
     </div>
     <div class="desc">
       <span class="desc-label">合理区间：</span>
@@ -22,7 +22,7 @@
   .left {
     width: 250px;
     height: 250px;
-    background: url(@/assets/images/right/range.png) no-repeat center center/100% 100%;
+    background: url(@/assets/images/right/rank.png) no-repeat center center/100% 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -54,14 +54,14 @@
       margin-top: 15px;
     }
 
-    .range {
+    .rank {
       margin-top: 20px;
       display: flex;
       align-items: center;
-      .range-label {
+      .rank-label {
         font-size: 18px;
       }
-      .range-value {
+      .rank-value {
         font-size: 25px;
         line-height: 25px;
         margin-left: 5px;
