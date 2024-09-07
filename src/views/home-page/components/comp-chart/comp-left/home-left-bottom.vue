@@ -24,7 +24,7 @@
     () => store.levelData,
     newData => {
       console.log("newD", newData);
-      fetchLevelData(newData);
+      setLevelData(newData);
     }
   );
   let pageData = reactive<ILevelDataItem[]>([]);
@@ -34,7 +34,7 @@
       return { label: item.name, value: item.indicatorIds.length };
     })
   );
-  function fetchLevelData(data: ILevelDataItem[]) {
+  function setLevelData(data: ILevelDataItem[]) {
     // 先清空数组
     pageData.splice(0, pageData.length);
     // 再添加新数据

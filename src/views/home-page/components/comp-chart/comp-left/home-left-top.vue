@@ -55,11 +55,11 @@
   watch(
     () => store.indicatorAnalysisData,
     newData => {
-      fetchIndicatorAnalysisData(newData);
+      setIndicatorAnalysisData(newData);
     }
   );
 
-  function fetchIndicatorAnalysisData(data: IAnalysisData) {
+  function setIndicatorAnalysisData(data: IAnalysisData) {
     // 更新 pageData 的属性
     pageData.indicatorName = data.indicatorName;
     pageData.topShowIndicator = data.topShowIndicator;

@@ -44,7 +44,7 @@
   watch(
     () => store.treeData,
     newData => {
-      fetchIndicators(newData);
+      setIndicators(newData);
     }
   );
 
@@ -78,7 +78,7 @@
     return rows;
   });
 
-  function fetchIndicators(data: IData[]) {
+  function setIndicators(data: IData[]) {
     // 假设 treeData 的结构与之前的 mockData 类似
     pageData.indicators = data; // 从 Pinia store 的 treeData 获取数据并赋值
   }

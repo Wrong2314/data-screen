@@ -1,5 +1,6 @@
 import { ILevelDataItem } from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
 import { IAnalysisData } from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
+import { IDetailData } from "@/views/home-page/components/comp-chart/comp-right/home-right-bottom.vue";
 import { IData } from "@/views/home-page/components/comp-tree/data-tree.vue";
 import axios from "axios";
 import { defineStore } from "pinia";
@@ -8,11 +9,11 @@ export const useDataStore = defineStore("data", {
   state: () => ({
     startDate: "2024-01-01",
     endDate: "2024-09-09",
-    activeTreeData: {}, //当前选中的tree指标
+    activeTreeData: {} as IData, //当前选中的tree指标
     indicatorAnalysisData: {} as IAnalysisData, //当前的xx分析信息
     treeData: [] as IData[], //当前条件全部tree指标
     levelData: [] as ILevelDataItem[], //当前条件level信息
-    indicatorDetailData: {}, //右上角指标详情
+    indicatorDetailData: {} as IDetailData, //右上角指标详情
     bizLineData: {}, //业务条线
     timeLineData: {}, //时间趋势
     highLightTreeDataIdArr: [] as string[], //需要高亮展示的指标id
@@ -93,6 +94,20 @@ export const useDataStore = defineStore("data", {
             indicatorIds: ["ddd", "eee", "fff"], //满足当前区间的指标id，用于点击时联动中间指标树的高亮显示
           },
         ];
+        this.indicatorDetailData = {
+          indicatorName: "", //指标名称
+          value: "", //指标值 最多小数点后4位
+          rank: "", //排名 最多2位
+          reasonableRange: "", //合理区间
+          avgValue: {
+            name: "", //名称
+            value: "", //值
+          }, //XX平均值
+          bestVo: {
+            name: "", //名称
+            value: "", //值
+          }, //XX最优值
+        };
       }, 2000);
     },
     //点击tree指标更新全局数据
