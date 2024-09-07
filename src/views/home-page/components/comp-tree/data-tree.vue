@@ -3,9 +3,7 @@
     <!-- 指标展示区域 -->
     <div class="indicator-display">
       <div class="row" v-for="(row, index) in displayedRows" :key="index">
-        <div class="indicator" v-for="indicator in row" :key="indicator.indicatorId">
-          {{ indicator.name }}
-        </div>
+        <div class="indicator" v-for="indicator in row" :key="indicator.indicatorId">{{ indicator.name }} {{ indicator.value }}</div>
       </div>
     </div>
     <!-- 分页控制 -->
@@ -13,15 +11,16 @@
       <button @click="prevPage">←</button>
       <button @click="nextPage">→</button>
     </div>
-    <!-- 放大展示区域 -->
+    <!-- 底部展示区域 -->
+
     <div class="indicator-zoom">
-      <div v-if="pageData.indicators.length > 0">
-        {{ pageData.indicators[0].name }}
-      </div>
+      <div v-if="pageData.activeIndicator">{{ pageData.activeIndicator.name }} {{ pageData.activeIndicator.value }}</div>
+      <div v-else-if="pageData.indicators.length > 0">{{ pageData.indicators[0].name }}{{ pageData.indicators[0].value }}</div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+  import { useDataStore } from "@/store/dataStore";
   import { onMounted, reactive, computed } from "vue";
 
   export interface IData {
@@ -31,15 +30,17 @@
   }
   export interface IPageData {
     indicators: IData[];
+    activeIndicator: IData | null;
     currentPage: number;
     pageSize: number;
   }
   const pageData = reactive<IPageData>({
     indicators: [], // 存储指标数据
+    activeIndicator: null, //当前选中的指标
     currentPage: 0, // 当前页码
     pageSize: 16, // 每页显示的指标数（8行，每行2个）
   });
-
+  const store = useDataStore();
   // 使用computed创建计算属性
   const displayedRows = computed(() => {
     const start = pageData.currentPage * pageData.pageSize;
@@ -87,6 +88,10 @@
     }
   }
 
+  //指标选中
+  function selectIndicator(indicator: IData) {
+    pageData.activeIndicator = indicator;
+  }
   onMounted(() => {
     fetchIndicators();
   });

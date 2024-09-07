@@ -1,7 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
-export const useDateStore = defineStore("date", {
+export const useDataStore = defineStore("data", {
   state: () => ({
     startDate: "2024-01-01",
     endDate: "2024-09-09",

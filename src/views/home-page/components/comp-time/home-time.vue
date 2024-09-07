@@ -27,11 +27,11 @@
   import { onMounted, ref } from "vue";
   import dayjs from "dayjs";
   import "dayjs/locale/zh-cn";
-  import { useDateStore } from "@/store/dateStore";
+  import { useDataStore } from "@/store/dataStore";
 
   const dateInfo = ref(["2024-01-01", "2024-09-09"]);
   const currentTime = ref(""); // 定义一个响应式变量来存储当前时间
-  const dateStore = useDateStore();
+  const dateStore = useDataStore();
   dayjs.locale("zh-cn");
   const updateTime = () => {
     currentTime.value = dayjs().format("dddd, YYYY-MM-DD");
