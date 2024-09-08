@@ -28,6 +28,7 @@
 <script setup lang="ts">
   import { computed, reactive, watch } from "vue";
   import { useDataStore } from "@/store/dataStore";
+  import axios from "axios";
   import up from "@/assets/images/right/up.png";
   import down from "@/assets/images/right/down.png";
 
@@ -42,49 +43,33 @@
     return +value > 0;
   };
 
-  let pageData = reactive<IBizLineData[]>([]);
-
   const store = useDataStore();
-  watch(
-    () => store.activeTreeData,
-    newData => {
-      const { indicatorId } = newData;
-      const areaId = store.indicatorAnalysisData.topShowIndicator?.code ?? "";
-      store.fetchBizLine(indicatorId, areaId);
+  const startDate = computed(() => store.startDate);
+  const endDate = computed(() => store.endDate);
+
+  let list = reactive<IBizLineData[]>([]);
+
+  const fetchBizLine = async (indicatorId?: string, areaId?: string) => {
+    try {
+      const { data } = await axios.get("/api/v1/spzx/business_line", {
+        params: {
+          kssj: startDate.value,
+          jssj: endDate.value,
+          areaId: areaId,
+          indicatorId: indicatorId,
+        },
+      });
+      list = data?.data || [];
+    } catch (error) {
+      console.error("fetchBizLine failed:", error);
     }
-  );
-  watch(
-    () => store.indicatorAnalysisData,
-    newData => {
-      const areaId = newData.topShowIndicator?.code ?? "";
-      const { indicatorId } = store.activeTreeData;
-      store.fetchBizLine(indicatorId, areaId);
-    }
-  );
-  watch(
-    () => store.bizLineData,
-    newData => {
-      setBizLineData(newData);
-    }
-  );
-  function setBizLineData(IBizLineDataArr: IBizLineData[]) {
-    // 先清空数组
-    pageData.splice(0, pageData.length);
-    // 再添加新数据
-    IBizLineDataArr.forEach(item => pageData.push(item));
-  }
-  //todo: 数据转换
-  const transList = computed(() => {
-    pageData.map(item => {
-      return { label: item.name, value: item.value };
-    });
+  };
+
+  watch([() => store.activeTreeData, () => store.indicatorAnalysisData], ([activeTreeData, indicatorAnalysisData]) => {
+    const { indicatorId } = activeTreeData;
+    const areaId = indicatorAnalysisData.topShowIndicator?.code ?? "";
+    fetchBizLine(indicatorId, areaId);
   });
-  const list = [
-    { label: "刑事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
-    { label: "民事", value: 50, lastMonth: "12.5", lastYear: "12.5", type: true },
-    { label: "行政", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
-    { label: "其他", value: 50, lastMonth: "12.5", lastYear: "12.5", type: false },
-  ];
 </script>
 
 <style scoped lang="scss">

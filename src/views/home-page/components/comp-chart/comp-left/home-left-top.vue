@@ -20,7 +20,6 @@
         :class="['indicator-item', 'rank-icon', `rank-${index + 1}`, 'active']"
         :data-rank="index + 1"
         @click="handleRankInfoClick(rankInfo.code)"
-        v-once
       >
         <div class="rank-label">
           <div class="indicator-name">{{ rankInfo.name }}</div>
@@ -95,18 +94,15 @@
 
   watch(
     () => store.indicatorAnalysisData,
-    (newData, oldData) => {
-      if (JSON.stringify(newData) !== JSON.stringify(oldData)) {
-        setIndicatorAnalysisData(newData);
-      }
-    },
-    { immediate: true }
+    newData => {
+      setIndicatorAnalysisData(newData);
+    }
   );
 
   function setIndicatorAnalysisData(data: IAnalysisData) {
     pageData.indicatorName = data.indicatorName;
     pageData.topShowIndicator = data.topShowIndicator;
-    pageData.rankInfoList = (data.rankInfoList || []).sort((a, b) => a.rank - b.rank);
+    pageData.rankInfoList = data.rankInfoList.sort((a, b) => a.rank - b.rank);
   }
 
   const handleRankInfoClick = (areaId: string) => {

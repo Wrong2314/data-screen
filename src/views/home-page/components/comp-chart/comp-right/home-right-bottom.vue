@@ -3,151 +3,192 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, reactive, watch } from "vue";
+  import { computed, ref, watch } from "vue";
   import { useDataStore } from "@/store/dataStore";
+  import axios from "axios";
   export interface ITimeLineData {
     name: string; //业务条线名称
     value: string; //值
   }
-  let pageData = reactive<ITimeLineData[]>([]);
 
   const store = useDataStore();
-  watch(
-    () => store.activeTreeData,
-    newData => {
-      const { indicatorId } = newData;
-      const areaId = store.indicatorAnalysisData.topShowIndicator?.code ?? "";
-      store.fetchTimeLine(indicatorId, areaId);
+  const startDate = computed(() => store.startDate);
+  const endDate = computed(() => store.endDate);
+
+  const option = ref({});
+  const seriesData = ref([]);
+  const xAxisData = computed(() => seriesData.value?.[0]?.data?.map(item => item?.name));
+  const colorStopsList = [
+    [
+      { offset: 0, color: "rgba(82, 140, 183, 0.6)" },
+      { offset: 1, color: "rgba(82, 140, 183, 0)" },
+    ],
+    [
+      { offset: 0, color: "rgba(204, 186, 156, 0.6)" },
+      { offset: 1, color: "rgba(204, 186, 156, 0)" },
+    ],
+  ];
+
+  const fetchTimeLine = async (indicatorId?: string, areaId?: string) => {
+    try {
+      const { data } = await axios.get("/api/v1/spzx/time_trend", {
+        params: {
+          kssj: startDate.value,
+          jssj: endDate.value,
+          areaId,
+          indicatorId,
+        },
+      });
+      // let temp = [
+      //   {
+      //     name: "本期",
+      //     data: [
+      //       { name: "1月", value: "300" },
+      //       { name: "2月", value: "400" },
+      //       { name: "3月", value: "350" },
+      //       { name: "4月", value: "250" },
+      //       { name: "5月", value: "320" },
+      //       { name: "6月", value: "450" },
+      //       { name: "7月", value: "500" },
+      //       { name: "8月", value: "450" },
+      //       { name: "9月", value: "280" },
+      //       { name: "10月", value: "200" },
+      //       { name: "11月", value: "230" },
+      //       { name: "12月", value: "280" },
+      //     ],
+      //   },
+      //   {
+      //     name: "同期",
+      //     data: [
+      //       { name: "1月", value: "180" },
+      //       { name: "2月", value: "200" },
+      //       { name: "3月", value: "350" },
+      //       { name: "4月", value: "500" },
+      //       { name: "5月", value: "400" },
+      //       { name: "6月", value: "350" },
+      //       { name: "7月", value: "220" },
+      //       { name: "8月", value: "280" },
+      //       { name: "9月", value: "420" },
+      //       { name: "10月", value: "380" },
+      //       { name: "11月", value: "350" },
+      //       { name: "12月", value: "400" },
+      //     ],
+      //   },
+      // ];
+      // const data = { data: temp };
+
+      seriesData.value = (data?.data || []).map((item: any[]) => ({
+        ...item,
+        seriesData: item.data.map((dataItem: string) => +dataItem.value),
+      }));
+      setOption();
+    } catch (error) {
+      console.error("fetchBizLine failed:", error);
     }
-  );
-  watch(
-    () => store.indicatorAnalysisData,
-    newData => {
-      const areaId = newData.topShowIndicator?.code ?? "";
-      const { indicatorId } = store.activeTreeData;
-      store.fetchTimeLine(indicatorId, areaId);
-    }
-  );
-  watch(
-    () => store.bizLineData,
-    newData => {
-      setTimeLineData(newData);
-    }
-  );
-  function setTimeLineData(ITimeLineDataArr: ITimeLineData[]) {
-    // 先清空数组
-    pageData.splice(0, pageData.length);
-    // 再添加新数据
-    ITimeLineDataArr.forEach(item => pageData.push(item));
-  }
-  //todo: pageData数据转换 成 表格
-  const transList = computed(() => {
-    pageData.map(item => {
-      return {};
-    });
+  };
+
+  watch([() => store.activeTreeData, () => store.indicatorAnalysisData], ([activeTreeData, indicatorAnalysisData]) => {
+    const { indicatorId } = activeTreeData;
+    const areaId = indicatorAnalysisData.topShowIndicator?.code ?? "";
+    fetchTimeLine(indicatorId, areaId);
   });
-  let data: number[] = [300, 400, 350, 250, 320, 450, 500, 450, 280, 200, 230, 280];
-  let data1: number[] = [180, 200, 350, 500, 400, 350, 220, 280, 420, 380, 350, 400];
 
-  let option = {
-    // background: "rgba(0, 0, 0, 0)",
-    color: ["#4885B3", "#C7C182"],
-    tooltip: {
-      trigger: "axis",
-      // hover背景色
-      backgroundColor: "#282a33",
-      // hover时的竖线
-      axisPointer: {
-        type: "line",
-        lineStyle: {
-          color: "rgb(126,199,255)",
-        },
-      },
-      // hover时的提示框文字颜色
-      textStyle: {
-        color: "#00e4ff",
-      },
-      // 边框发光 根据不同的series设置不同的color
-      // extraCssText: "filter:drop-shadow(0 0 .1rem #71d8d9);",
-    },
-    legend: {
-      top: "top",
-      icon: "rect",
-      show: true,
-      itemWidth: 30,
-      itemHeight: 4,
-      textStyle: {
-        color: "rgba(255, 255, 255, 1)",
-        fontSize: 14,
-        padding: [0, 8, 0, 8],
-      },
-    },
-    grid: {
-      top: "15%",
-      left: "10%",
-      right: "8%",
-      bottom: "15%",
-    },
-    xAxis: [
-      {
-        type: "category",
-        boundaryGap: false,
-        axisLabel: {
-          color: "rgba(112, 151, 184, 1)",
-          fontSize: 12,
-        },
-        axisLine: {
-          show: false,
-        },
-        splitLine: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
-        data: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12月"],
-      },
-    ],
-    yAxis: [
-      {
-        name: "",
-        nameTextStyle: {
-          color: "#fff",
-          fontSize: 12,
-          padding: [0, 60, 0, 0],
-        },
-        // minInterval: 1,
-        type: "value",
-        axisLabel: {
-          show: true,
-          color: "rgba(112, 151, 184, 1)",
-          fontSize: 14,
-        },
-        axisLine: {
-          show: false,
-        },
-        splitLine: {
-          show: true,
+  const setOption = () => {
+    option.value = {
+      // background: "rgba(0, 0, 0, 0)",
+      color: ["#4885B3", "#C7C182"],
+      tooltip: {
+        trigger: "axis",
+        // hover背景色
+        backgroundColor: "#282a33",
+        // hover时的竖线
+        axisPointer: {
+          type: "line",
           lineStyle: {
-            color: "#999",
+            color: "rgb(126,199,255)",
           },
         },
-        axisTick: {
-          show: false,
+        // hover时的提示框文字颜色
+        textStyle: {
+          color: "#00e4ff",
         },
       },
-    ],
-    series: [
-      {
-        name: "本期",
+      legend: {
+        top: "top",
+        icon: "rect",
+        show: true,
+        itemWidth: 30,
+        itemHeight: 4,
+        textStyle: {
+          color: "rgba(255, 255, 255, 1)",
+          fontSize: 14,
+          padding: [0, 8, 0, 8],
+        },
+      },
+      grid: {
+        top: "15%",
+        left: "10%",
+        right: "8%",
+        bottom: "15%",
+      },
+      xAxis: [
+        {
+          type: "category",
+          boundaryGap: false,
+          axisLabel: {
+            color: "rgba(112, 151, 184, 1)",
+            fontSize: 12,
+          },
+          axisLine: {
+            show: false,
+          },
+          splitLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+          data: xAxisData,
+        },
+      ],
+      yAxis: [
+        {
+          name: "",
+          nameTextStyle: {
+            color: "#fff",
+            fontSize: 12,
+            padding: [0, 60, 0, 0],
+          },
+          // minInterval: 1,
+          type: "value",
+          axisLabel: {
+            show: true,
+            color: "rgba(112, 151, 184, 1)",
+            fontSize: 14,
+          },
+          axisLine: {
+            show: false,
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "#999",
+            },
+          },
+          axisTick: {
+            show: false,
+          },
+        },
+      ],
+      series: seriesData.value.map((seriesItem: any[], index: number) => ({
+        name: seriesItem.name,
         type: "line",
         showSymbol: false,
         symbol: "none",
         smooth: true,
-
         lineStyle: {
           width: 1,
-          color: "#4885B3",
+          color: "#4885B3", //#C7C182
         },
         areaStyle: {
           color: {
@@ -156,54 +197,12 @@
             y: 0,
             x2: 0,
             y2: 1,
-            colorStops: [
-              // 渐变颜色
-              {
-                offset: 0,
-                color: "rgba(82, 140, 183, 0.6)",
-              },
-              {
-                offset: 1,
-                color: "rgba(82, 140, 183, 0)",
-              },
-            ],
+            colorStops: colorStopsList[index],
             global: false,
           },
         },
-        data: data,
-      },
-      {
-        name: "同期",
-        type: "line",
-        showSymbol: false,
-        symbol: "none",
-        smooth: true,
-        lineStyle: {
-          width: 1,
-          color: "#C7C182", // 线条颜色
-        },
-        areaStyle: {
-          color: {
-            type: "linear",
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [
-              {
-                offset: 0,
-                color: "rgba(204, 186, 156, 0.6)",
-              },
-              {
-                offset: 1,
-                color: "rgba(204, 186, 156, 0)",
-              },
-            ],
-            global: false,
-          },
-        },
-        data: data1,
-      },
-    ],
+        data: seriesItem.seriesData,
+      })),
+    };
   };
 </script>
