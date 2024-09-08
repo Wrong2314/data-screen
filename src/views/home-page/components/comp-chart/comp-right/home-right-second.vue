@@ -3,13 +3,13 @@
     <div class="flex-item">
       <div class="label">全省平均值</div>
       <div class="value">
-        <dv-water-level-pond :config="configAvg" style="width: 100px; height: 100px" />
+        <dv-water-level-pond :config="configAvg" class="water" />
       </div>
     </div>
     <div class="flex-item">
       <div class="label">全省最高值</div>
       <div class="value">
-        <dv-water-level-pond :config="configMax" style="width: 100px; height: 100px" />
+        <dv-water-level-pond :config="configMax" class="water" />
       </div>
     </div>
   </div>
@@ -37,8 +37,10 @@
 
 <style scoped lang="scss">
   .container {
+    height: 300px;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
   }
 
@@ -46,5 +48,9 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
+  }
+  .water {
+    width: 90px;
+    height: 90px;
   }
 </style>
