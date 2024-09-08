@@ -6,6 +6,7 @@
   import { computed, ref, watch } from "vue";
   import { useDataStore } from "@/store/dataStore";
   import axios from "axios";
+
   export interface ITimeLineData {
     name: string; //业务条线名称
     value: string; //值
@@ -15,7 +16,7 @@
   const startDate = computed(() => store.startDate);
   const endDate = computed(() => store.endDate);
 
-  const option = ref({});
+  let option = ref({});
   const seriesData = ref([]);
   const xAxisData = computed(() => seriesData.value?.[0]?.data?.map(item => item?.name));
   const colorStopsList = [
@@ -31,7 +32,7 @@
 
   const fetchTimeLine = async (indicatorId?: string, areaId?: string) => {
     try {
-      const { data } = await axios.get("/api/v1/spzx/time_trend", {
+      let { data } = await axios.get("/api/v1/spzx/time_trend", {
         params: {
           kssj: startDate.value,
           jssj: endDate.value,
@@ -39,43 +40,45 @@
           indicatorId,
         },
       });
-      // let temp = [
-      //   {
-      //     name: "本期",
-      //     data: [
-      //       { name: "1月", value: "300" },
-      //       { name: "2月", value: "400" },
-      //       { name: "3月", value: "350" },
-      //       { name: "4月", value: "250" },
-      //       { name: "5月", value: "320" },
-      //       { name: "6月", value: "450" },
-      //       { name: "7月", value: "500" },
-      //       { name: "8月", value: "450" },
-      //       { name: "9月", value: "280" },
-      //       { name: "10月", value: "200" },
-      //       { name: "11月", value: "230" },
-      //       { name: "12月", value: "280" },
-      //     ],
-      //   },
-      //   {
-      //     name: "同期",
-      //     data: [
-      //       { name: "1月", value: "180" },
-      //       { name: "2月", value: "200" },
-      //       { name: "3月", value: "350" },
-      //       { name: "4月", value: "500" },
-      //       { name: "5月", value: "400" },
-      //       { name: "6月", value: "350" },
-      //       { name: "7月", value: "220" },
-      //       { name: "8月", value: "280" },
-      //       { name: "9月", value: "420" },
-      //       { name: "10月", value: "380" },
-      //       { name: "11月", value: "350" },
-      //       { name: "12月", value: "400" },
-      //     ],
-      //   },
-      // ];
-      // const data = { data: temp };
+
+      data = {
+        data: [
+          {
+            name: "本期",
+            data: [
+              { name: "1月", value: "300" },
+              { name: "2月", value: "400" },
+              { name: "3月", value: "350" },
+              { name: "4月", value: "250" },
+              { name: "5月", value: "320" },
+              { name: "6月", value: "450" },
+              { name: "7月", value: "500" },
+              { name: "8月", value: "450" },
+              { name: "9月", value: "280" },
+              { name: "10月", value: "200" },
+              { name: "11月", value: "230" },
+              { name: "12月", value: "280" },
+            ],
+          },
+          {
+            name: "同期",
+            data: [
+              { name: "1月", value: "180" },
+              { name: "2月", value: "200" },
+              { name: "3月", value: "350" },
+              { name: "4月", value: "500" },
+              { name: "5月", value: "400" },
+              { name: "6月", value: "350" },
+              { name: "7月", value: "220" },
+              { name: "8月", value: "280" },
+              { name: "9月", value: "420" },
+              { name: "10月", value: "380" },
+              { name: "11月", value: "350" },
+              { name: "12月", value: "400" },
+            ],
+          },
+        ],
+      };
 
       seriesData.value = (data?.data || []).map((item: any[]) => ({
         ...item,
