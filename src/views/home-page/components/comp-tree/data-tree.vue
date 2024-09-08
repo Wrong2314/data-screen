@@ -3,7 +3,14 @@
     <div class="indicator-display">
       <div class="row" v-for="(row, index) in displayedRows" :key="index">
         <!-- 添加点击事件监听 -->
-        <div class="indicator" v-for="indicator in row" :key="indicator.indicatorId" @click="handleIndicatorClick(indicator)">{{ indicator.name }} {{ indicator.value }}</div>
+        <div
+          class="indicator"
+          v-for="indicator in row"
+          :key="indicator.indicatorId"
+          @click="handleIndicatorClick(indicator)"
+        >
+          {{ indicator.name }} {{ indicator.value }}
+        </div>
       </div>
     </div>
     <div class="pagination-controls">
@@ -12,7 +19,9 @@
     </div>
     <div class="indicator-zoom">
       <div v-if="pageData.activeIndicator">{{ pageData.activeIndicator.name }} {{ pageData.activeIndicator }}</div>
-      <div v-else-if="pageData.indicators.length > 0">{{ pageData.indicators[0].name }}{{ pageData.indicators[0].value }}</div>
+      <div v-else-if="pageData.indicators.length > 0">
+        {{ pageData.indicators[0].name }}{{ pageData.indicators[0].value }}
+      </div>
     </div>
   </div>
 </template>

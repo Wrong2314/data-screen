@@ -59,14 +59,17 @@
     justify-content: space-around;
     align-items: stretch;
   }
+
   .demo-datetime-picker .block {
     padding: 10px 0;
     text-align: center;
   }
+
   .line {
     width: 1px;
     background-color: var(--el-border-color);
   }
+
   .nowTime {
     width: 36%;
     height: 100%;
@@ -76,6 +79,7 @@
     font-size: 16px;
     margin-left: auto;
   }
+
   .current-time {
     color: whitesmoke;
     font-size: 16px;

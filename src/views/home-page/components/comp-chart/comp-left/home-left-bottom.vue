@@ -1,5 +1,5 @@
 <template>
-  <div class="left-bottom">
+  <div id="left-bottom">
     <div v-for="(item, index) in list" :key="index">
       <div class="value-container" @click="handleLevelItemClick(item.label)">
         <div class="value-bg">
@@ -53,11 +53,12 @@
 </script>
 
 <style scoped lang="scss">
-  .left-bottom {
+  #left-bottom {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    padding: 20px 0;
+    padding: 25px 0 50px;
+    min-height: 210px;
 
     .value-container {
       display: flex;
@@ -85,11 +86,26 @@
       }
 
       .label {
-        margin-top: 5px;
         padding: 5px 0;
-        font-size: 12px;
+        margin-top: 5px;
+        font-size: 16px;
+        font-weight: 600;
         line-height: 20px;
-        color: #fff;
+        background: linear-gradient(to bottom, #fff, #56c8ed);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+        position: relative;
+      }
+
+      .label::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background: url("@/assets/images/left/bg-label.png") no-repeat center center/100% 100%;
       }
     }

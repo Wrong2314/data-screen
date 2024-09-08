@@ -52,6 +52,13 @@ export const useDataStore = defineStore("data", {
               value: "80", //指标值
               canSelected: true, //是否可选中，true: 可以 false: 不可以. 用于判断排序的列表元素是否可以点击触发查询
             },
+            {
+              rank: 2, //排名，如：1
+              code: "2400_fyxq", //代码值，当前展示地区的代码值，用于选中查询其他接口的条件，如：2400_fyxq、2401
+              name: "长春市中级人民法院", //名称，如：长春市中级人民法院，长春净月高新技术产业开发区人民法院
+              value: "60", //指标值
+              canSelected: true, //是否可选中，true: 可以 false: 不可以. 用于判断排序的列表元素是否可以点击触发查询
+            },
           ], //排名情况
         };
         this.treeData = [
@@ -115,7 +122,9 @@ export const useDataStore = defineStore("data", {
     //点击tree指标更新全局数据
     async fetchIndicatorAnalysisData(indicatorId?: string) {
       try {
-        const response = await axios.get(`/api/v1/spzx/any_indicator_analysis?kssj=${this.startDate}&jssj=${this.endDate}&indicatorId=${indicatorId}`);
+        const response = await axios.get(
+          `/api/v1/spzx/any_indicator_analysis?kssj=${this.startDate}&jssj=${this.endDate}&indicatorId=${indicatorId}`
+        );
         this.indicatorAnalysisData = response.data;
       } catch (error) {
         console.error("fetchIndicatorAnalysisData failed:", error);
@@ -124,7 +133,9 @@ export const useDataStore = defineStore("data", {
     //点击排名列表项更新全局数据
     async fetchTreeData(areaId?: string) {
       try {
-        const response = await axios.get(`/api/v1/spzx/indicator_tree?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`);
+        const response = await axios.get(
+          `/api/v1/spzx/indicator_tree?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`
+        );
         this.treeData = response.data;
       } catch (error) {
         console.error("fetchTreeData failed:", error);
@@ -133,7 +144,9 @@ export const useDataStore = defineStore("data", {
     //点击排名列表项更新全局数据
     async fetchLevelData(areaId?: string) {
       try {
-        const response = await axios.get(`/api/v1/spzx/zxzbqk?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`);
+        const response = await axios.get(
+          `/api/v1/spzx/zxzbqk?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`
+        );
         this.levelData = response.data;
       } catch (error) {
         console.error("fetchLevelData failed:", error);
@@ -142,7 +155,9 @@ export const useDataStore = defineStore("data", {
     //点击排名列表项更新全局数据
     async fetchDetailData(indicatorId?: string, areaId?: string) {
       try {
-        const response = await axios.get(`/api/v1/spzx/indicator_info?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`);
+        const response = await axios.get(
+          `/api/v1/spzx/indicator_info?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`
+        );
         this.indicatorDetailData = response.data;
       } catch (error) {
         console.error("fetchDetailData failed:", error);
@@ -150,7 +165,9 @@ export const useDataStore = defineStore("data", {
     },
     async fetchBizLine(indicatorId?: string, areaId?: string) {
       try {
-        const response = await axios.get(`/api/v1/spzx/business_line?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`);
+        const response = await axios.get(
+          `/api/v1/spzx/business_line?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`
+        );
         this.bizLineData = response.data;
       } catch (error) {
         console.error("fetchBizLine failed:", error);
@@ -158,7 +175,9 @@ export const useDataStore = defineStore("data", {
     },
     async fetchTimeLine(indicatorId?: string, areaId?: string) {
       try {
-        const response = await axios.get(`/api/v1/spzx/time_trend?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`);
+        const response = await axios.get(
+          `/api/v1/spzx/time_trend?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`
+        );
         this.timeLineData = response.data;
       } catch (error) {
         console.error("fetchTimeLine failed:", error);

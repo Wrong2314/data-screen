@@ -10,6 +10,7 @@
   import HomeRightSecond from "@/views/home-page/components/comp-chart/comp-right/home-right-second.vue";
   import { useDataStore } from "@/store/dataStore";
   import { reactive, watch } from "vue";
+
   export interface IDetailData {
     indicatorName: string; //指标名称
     value: string; //指标值 最多小数点后4位
@@ -24,6 +25,7 @@
       value: string; //值
     };
   }
+
   let pageData = reactive<IDetailData>({
     indicatorName: "", //指标名称
     value: "", //指标值 最多小数点后4位
@@ -61,6 +63,7 @@
       setDetailData(newData);
     }
   );
+
   function setDetailData(data: IDetailData) {
     pageData.value = data.value;
     pageData.reasonableRange = data.reasonableRange;
@@ -69,6 +72,7 @@
     pageData.bestVo = data.bestVo;
     pageData.avgValue = data.avgValue;
   }
+
   //todo:数据转换
 </script>
 

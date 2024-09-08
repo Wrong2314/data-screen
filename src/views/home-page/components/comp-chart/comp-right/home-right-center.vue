@@ -1,7 +1,7 @@
 <template>
   <div class="right-center">
     <div v-for="(item, index) in list" :key="index" class="progress-container">
-      <el-progress type="circle" :percentage="item.value" :width="90" :stroke-width="8">
+      <el-progress type="circle" :percentage="+item.value" :width="90" :stroke-width="8">
         <template #default>
           <span class="progress-value progress-color">{{ item.value }}</span>
           <span class="progress-unit progress-color">%</span>
@@ -9,16 +9,16 @@
       </el-progress>
 
       <div class="progress-desc">
-        <div class="progress-color">{{ item.label }}</div>
+        <div class="progress-color">{{ item.name }}</div>
         <div class="value">
           <span class="value-label">同比</span>
-          <span :class="item.type ? 'up' : 'down'">{{ item.lastMonth }}</span>
-          <img :src="item.type ? up : down" alt="#" />
+          <span :class="formatValue(item.yoyValue) ? 'up' : 'down'">{{ item.yoyValue }}</span>
+          <img :src="formatValue(item.qoqValue) ? up : down" alt="#" />
         </div>
         <div class="value">
           <span class="value-label">环比</span>
-          <span :class="item.type ? 'up' : 'down'">{{ item.lastYear }}</span>
-          <img :src="item.type ? up : down" alt="#" />
+          <span :class="formatValue(item.yoyValue) ? 'up' : 'down'">{{ item.qoqValue }}</span>
+          <img :src="formatValue(item.qoqValue) ? up : down" alt="#" />
         </div>
       </div>
     </div>
@@ -26,16 +26,22 @@
 </template>
 
 <script setup lang="ts">
-  import up from "@/assets/images/right/up.png";
-  import down from "@/assets/images/right/down.png";
   import { computed, reactive, watch } from "vue";
   import { useDataStore } from "@/store/dataStore";
+  import up from "@/assets/images/right/up.png";
+  import down from "@/assets/images/right/down.png";
+
   export interface IBizLineData {
     name: string; //业务条线名称
     value: string; //值
     yoyValue: string; //同比值
     qoqValue: string; //环比值
   }
+
+  const formatValue = (value: string) => {
+    return +value > 0;
+  };
+
   let pageData = reactive<IBizLineData[]>([]);
 
   const store = useDataStore();
@@ -135,7 +141,13 @@
       height: 100%;
       z-index: -1;
 
-      background: linear-gradient(to bottom, rgba(67, 154, 248, 0.2) 0%, rgba(67, 154, 248, 0) 5%, rgba(67, 154, 248, 0) 95%, rgba(67, 154, 248, 0.2) 100%);
+      background: linear-gradient(
+        to bottom,
+        rgba(67, 154, 248, 0.2) 0%,
+        rgba(67, 154, 248, 0) 5%,
+        rgba(67, 154, 248, 0) 95%,
+        rgba(67, 154, 248, 0.2) 100%
+      );
     }
   }
 
