@@ -7,8 +7,8 @@
       </div>
       <div class="value-container">
         <span class="label">较上期</span>
-        <img :src="formatValue(pageData.topShowIndicator?.compareWithPeriod) ? up : down" alt="#" class="img" />
-        <span :class="['percent', formatValue(pageData.topShowIndicator?.compareWithPeriod) ? 'up' : 'down']">
+        <img :src="formatValue(pageData.topShowIndicator?.compareWithPeriod || '') ? up : down" alt="#" class="img" />
+        <span :class="['percent', formatValue(pageData.topShowIndicator?.compareWithPeriod || '') ? 'up' : 'down']">
           {{ pageData.topShowIndicator?.compareWithPeriod }}
         </span>
       </div>
@@ -159,9 +159,10 @@
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
-
+    :hover {
+      background: url("@/assets/images/left/active.png") no-repeat center center/100% 100%;
+    }
     /* 隐藏滚动条，保留滚动功能 */
-
     ::-webkit-scrollbar {
       display: none;
     }
@@ -174,6 +175,9 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      :hover {
+        background: initial;
+      }
     }
 
     .rank-label {
@@ -213,10 +217,6 @@
 
     .rank-3::before {
       background-image: url("@/assets/images/left/3.png");
-    }
-
-    .active {
-      background: url("@/assets/images/left/active.png") no-repeat center center/100% 100%;
     }
   }
 

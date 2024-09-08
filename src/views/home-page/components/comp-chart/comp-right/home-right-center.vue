@@ -47,7 +47,32 @@
   const startDate = computed(() => store.startDate);
   const endDate = computed(() => store.endDate);
 
-  let list = reactive<IBizLineData[]>([]);
+  let list = reactive<IBizLineData[]>([
+    {
+      name: "刑事", //业务条线名称
+      value: "20", //值
+      yoyValue: "10", //同比值
+      qoqValue: "10", //环比值
+    },
+    {
+      name: "民事", //业务条线名称
+      value: "30", //值
+      yoyValue: "10", //同比值
+      qoqValue: "10", //环比值
+    },
+    {
+      name: "行政", //业务条线名称
+      value: "40", //值
+      yoyValue: "10", //同比值
+      qoqValue: "10", //环比值
+    },
+    {
+      name: "其他", //业务条线名称
+      value: "50", //值
+      yoyValue: "10", //同比值
+      qoqValue: "10", //环比值
+    },
+  ]);
 
   const fetchBizLine = async (indicatorId?: string, areaId?: string) => {
     try {

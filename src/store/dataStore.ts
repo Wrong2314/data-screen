@@ -173,6 +173,43 @@ export const useDataStore = defineStore("data", {
             value: "", //值
           }, //XX最优值
         };
+        this.bizLineData = [
+          {
+            name: "刑事", //业务条线名称
+            value: "20", //值
+            yoyValue: "10", //同比值
+            qoqValue: "10", //环比值
+          },
+          {
+            name: "民事", //业务条线名称
+            value: "30", //值
+            yoyValue: "10", //同比值
+            qoqValue: "10", //环比值
+          },
+          {
+            name: "行政", //业务条线名称
+            value: "40", //值
+            yoyValue: "10", //同比值
+            qoqValue: "10", //环比值
+          },
+          {
+            name: "其他", //业务条线名称
+            value: "50", //值
+            yoyValue: "10", //同比值
+            qoqValue: "10", //环比值
+          },
+        ];
+        this.timeLineData = [
+          {
+            name: "", //名称
+            data: [
+              {
+                name: "", //名称
+                value: "", //值
+              },
+            ], //数据
+          },
+        ];
       }, 2000);
     },
     //点击tree指标更新全局数据
