@@ -62,7 +62,7 @@ export const useDataStore = defineStore("data", {
           ], //排名情况
         };
         this.treeData = [
-          { indicatorId: "aaa", name: "aaa", value: 10 },
+          { indicatorId: "aaa", name: "达标率", value: 10 },
           { indicatorId: "bbb", name: "bbb", value: 10 },
           { indicatorId: "ccc", name: "ccc", value: 10 },
           { indicatorId: "ddd", name: "ddd", value: 10 },
