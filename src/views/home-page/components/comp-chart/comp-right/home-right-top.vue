@@ -1,15 +1,40 @@
 <template>
   <div id="right-top">
-    <home-right-first />
-    <home-right-second />
+    <div class="left">
+      <div class="value">
+        <span class="value-data value-color">{{ pageData.value }}</span>
+        <span class="value-unit">%</span>
+      </div>
+      <div class="label">{{ pageData.indicatorName }}</div>
+      <div class="rank">
+        <span class="rank-label">排名</span>
+        <span class="rank-value value-color">{{ pageData.rank }}</span>
+      </div>
+      <div class="desc">
+        <span class="desc-label">合理区间：</span>
+        <span class="desc-value">{{ pageData.reasonableRange }}</span>
+      </div>
+    </div>
+    <div class="right">
+      <div class="flex-item">
+        <div class="label">{{ pageData.avgValue.name }}</div>
+        <div class="value">
+          <dv-water-level-pond :config="configAvg" class="water" />
+        </div>
+      </div>
+      <div class="flex-item">
+        <div class="label">{{ pageData.bestVo.name }}</div>
+        <div class="value">
+          <dv-water-level-pond :config="configMax" class="water" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import HomeRightFirst from "@/views/home-page/components/comp-chart/comp-right/home-right-first.vue";
-  import HomeRightSecond from "@/views/home-page/components/comp-chart/comp-right/home-right-second.vue";
   import { useDataStore } from "@/store/dataStore";
-  import { reactive, watch } from "vue";
+  import { computed, reactive, watch } from "vue";
 
   export interface IDetailData {
     indicatorName: string; //指标名称
@@ -25,7 +50,6 @@
       value: string; //值
     };
   }
-
   let pageData = reactive<IDetailData>({
     indicatorName: "", //指标名称
     value: "", //指标值 最多小数点后4位
@@ -41,6 +65,22 @@
     },
   });
   const store = useDataStore();
+  const configAvg = reactive({
+    data: computed(() => [pageData.avgValue.value]), // 假设这是全省平均值
+    shape: "round",
+    waveNum: 1,
+    waveHeight: 10,
+    colors: ["#1E90FF", "#87CEFA"],
+  });
+
+  const configMax = reactive({
+    data: computed(() => [pageData.bestVo.value]), // 假设这是全省最高值
+    shape: "round",
+    waveNum: 1,
+    waveHeight: 10,
+    colors: ["#FFD700", "#FFA500"],
+  });
+
   watch(
     () => store.activeTreeData,
     newData => {
@@ -84,5 +124,77 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+  }
+  .right {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .flex-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  .water {
+    width: 90px;
+    height: 90px;
+  }
+  .left {
+    width: 250px;
+    height: 250px;
+    background: url(@/assets/images/right/rank.png) no-repeat center center/100% 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 135px;
+
+    .value-color {
+      background: linear-gradient(to bottom, #fff, #ecd237);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .value {
+      .value-data {
+        margin-left: 20px;
+        font-size: 50px;
+        line-height: 50px;
+      }
+      .value-unit {
+        font-size: 12px;
+      }
+    }
+
+    .label {
+      font-size: 25px;
+      line-height: 25px;
+      margin-top: 15px;
+    }
+
+    .rank {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      .rank-label {
+        font-size: 18px;
+      }
+      .rank-value {
+        font-size: 25px;
+        line-height: 25px;
+        margin-left: 5px;
+        font-weight: 600;
+      }
+    }
+
+    .desc {
+      margin-top: 20px;
+      font-weight: 200;
+    }
   }
 </style>

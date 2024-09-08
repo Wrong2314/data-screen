@@ -160,17 +160,17 @@ export const useDataStore = defineStore("data", {
           },
         ];
         this.indicatorDetailData = {
-          indicatorName: "", //指标名称
-          value: "", //指标值 最多小数点后4位
-          rank: "", //排名 最多2位
-          reasonableRange: "", //合理区间
+          indicatorName: "达标率", //指标名称
+          value: "50", //指标值 最多小数点后4位
+          rank: "1", //排名 最多2位
+          reasonableRange: "10-100", //合理区间
           avgValue: {
-            name: "", //名称
-            value: "", //值
+            name: "全省平均值", //名称
+            value: "50", //值
           }, //XX平均值
           bestVo: {
-            name: "", //名称
-            value: "", //值
+            name: "全省最高值", //名称
+            value: "50", //值
           }, //XX最优值
         };
         this.bizLineData = [
@@ -197,17 +197,6 @@ export const useDataStore = defineStore("data", {
             value: "50", //值
             yoyValue: "10", //同比值
             qoqValue: "10", //环比值
-          },
-        ];
-        this.timeLineData = [
-          {
-            name: "", //名称
-            data: [
-              {
-                name: "", //名称
-                value: "", //值
-              },
-            ], //数据
           },
         ];
       }, 2000);
