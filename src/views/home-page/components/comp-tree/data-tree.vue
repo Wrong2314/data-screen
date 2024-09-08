@@ -30,7 +30,8 @@
       <div class="indicator-zoom">
         <div v-if="pageData.activeIndicator">
           <span class="label">{{ pageData.activeIndicator.name }}</span>
-          <span class="value">{{ pageData.activeIndicator }}</span>
+          <span class="value">{{ pageData.activeIndicator.value }}</span>
+          <span class="label">%</span>
         </div>
         <div v-else-if="pageData.indicators.length > 0">
           <span class="label">{{ pageData.indicators[0].name }}</span>
@@ -214,12 +215,12 @@
     background: url("@/assets/images/center/left-bg.png") no-repeat center center/100% 100% !important;
   }
 
-  /*TODO: 修改背景图
+  /* TODO: 修改背景图 */
   .bg-left-active {
     padding-right: 60px;
     justify-content: flex-end;
-    background: url("@/assets/images/center/left-bg.png") no-repeat center center/100% 100% !important;
-  }*/
+    /* background: url("@/assets/images/center/left-bg.png") no-repeat center center/100% 100% !important; */
+  }
 
   .bg-right {
     padding-left: 60px;
@@ -227,12 +228,12 @@
     background: url("@/assets/images/center/right-bg.png") no-repeat center center/100% 100% !important;
   }
 
-  /*TODO: 修改背景图
+  /* TODO: 修改背景图 */
   .bg-right-active {
     padding-left: 60px;
     justify-content: flex-start;
-    background: url("@/assets/images/center/right-bg.png") no-repeat center center/100% 100% !important;
-  }*/
+    /* background: url("@/assets/images/center/right-bg.png") no-repeat center center/100% 100% !important; */
+  }
 
   .indicator-value {
     font-size: 25px;
