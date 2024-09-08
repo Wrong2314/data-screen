@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
+import DataVVue3 from "@kjgl77/datav-vue3";
 
 // 按需引入element-plus只引入了需要的组件，但是样式文件是全局的，
 import "element-plus/dist/index.css";
@@ -18,6 +19,7 @@ import { createPinia } from "pinia";
 const pinia = createPinia();
 
 const app = createApp(App);
+app.use(DataVVue3);
 app.use(pinia).use(router).mount("#app");
 
 export default app;
