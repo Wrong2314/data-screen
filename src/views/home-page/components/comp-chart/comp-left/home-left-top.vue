@@ -125,7 +125,7 @@
       display: flex;
       align-items: center;
       .label {
-        color: #999;
+        color: #ffffff;
       }
 
       .img {

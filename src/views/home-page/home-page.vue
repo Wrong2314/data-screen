@@ -15,7 +15,7 @@
           <!-- 左侧列表 -->
           <div class="sides-item">
             <div class="section-small-title">
-              <img :src="TitleLeftTop" alt="#" />
+              <span class="label"><!-- TODO：改成变量  --></span>
             </div>
             <div class="chart">
               <ChartLeftTop />
@@ -25,7 +25,7 @@
           <!-- 左下质效指标 -->
           <div class="bottom">
             <div class="section-small-title">
-              <img :src="TitleLeftBottom" alt="#" />
+              <span class="label">质效指标情况</span>
             </div>
             <div class="chart">
               <ChartLeftBottom />
@@ -50,7 +50,7 @@
           <!-- 右侧中间 -->
           <div class="sides-item">
             <div class="section-small-title">
-              <img :src="TitleRightCenter" alt="#" />
+              <span class="label">业务条线</span>
             </div>
             <div class="chart">
               <ChartRightCenter />
@@ -60,7 +60,7 @@
           <!-- 右侧底部折线图 -->
           <div class="sides-item">
             <div class="section-small-title">
-              <img :src="TitleRightBottom" alt="#" />
+              <span class="label">时间趋势</span>
             </div>
             <div class="chart">
               <ChartRightBottom />
@@ -74,12 +74,6 @@
 
 <script setup lang="ts">
   import { onMounted, ref } from "vue";
-
-  import TitleLeftTop from "@/assets/images/title/left-top.png";
-  import TitleLeftBottom from "@/assets/images/title/left-bottom.png";
-  import TitleRightCenter from "@/assets/images/title/right-center.png";
-  import TitleRightBottom from "@/assets/images/title/right-bottom.png";
-
   import HomeTime from "@/views/home-page/components/comp-time/home-time.vue";
   import ChartLeftTop from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
   import ChartLeftBottom from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
@@ -147,8 +141,14 @@
           width: 100%;
           height: 50px;
           line-height: 50px;
-          font-size: 25px;
+          font-size: 20px;
+          font-weight: 600;
           color: #fff;
+          background: url("@/assets/images/title.jpg") no-repeat center center/100% 100%;
+
+          .label {
+            padding-left: 45px;
+          }
         }
 
         .both-sides {
@@ -170,7 +170,7 @@
           animation: both-sides-left 1.5s;
 
           .section-small-title {
-            padding-left: 25px;
+            margin-left: 25px;
           }
         }
 
