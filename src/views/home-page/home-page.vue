@@ -113,6 +113,7 @@
   .container {
     width: 100%;
     height: 100%;
+    background-color: #001538;
 
     .screen {
       position: fixed;
@@ -122,7 +123,6 @@
       width: 1920px;
       height: 1080px;
       background: url(@/assets/images/bg.jpg) no-repeat center center/100% 100%;
-      border-radius: 15px;
 
       // 头部
       header {
