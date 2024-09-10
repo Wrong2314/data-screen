@@ -15,7 +15,7 @@
           <!-- 左侧列表 -->
           <div class="sides-item">
             <div class="section-small-title">
-              <span class="label">{{ activeName }}分析</span>
+              <span class="label">{{ activeName || "达标率" }}分析</span>
             </div>
             <div class="chart">
               <ChartLeftTop />

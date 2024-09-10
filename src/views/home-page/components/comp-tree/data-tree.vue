@@ -10,10 +10,10 @@
           @click="handleIndicatorClick(indicator)"
         >
           <div class="indicator-value">
-            <img :src="getIndicatorPic(indicator.value)" alt="#" v-if="innerIndex % 2" />
+            <img :src="getIndicatorPic" alt="#" v-if="isShow(indicator.indicatorId) && innerIndex % 2" />
             <span>{{ indicator.name }}</span>
-            <span>{{ indicator.value }}</span>
-            <img :src="getIndicatorPic(indicator.value)" alt="#" v-if="!(innerIndex % 2)" />
+            <span>{{ indicator.value }}%</span>
+            <img :src="getIndicatorPic" alt="#" v-if="isShow(indicator.indicatorId) && !(innerIndex % 2)" />
           </div>
         </div>
       </div>
@@ -23,8 +23,8 @@
       <img :src="leftButton" alt="#" @click="prevPage" />
       <div class="indicator-zoom">
         <div>
-          <span class="label">{{ pageData.activeIndicator?.name }}</span>
-          <span class="value">{{ pageData.activeIndicator?.value }}</span>
+          <span class="label">{{ centerData?.name }}</span>
+          <span class="value">{{ centerData?.value }}</span>
           <span class="label">%</span>
         </div>
       </div>
@@ -41,6 +41,10 @@
   import mid from "@/assets/images/center/mid.png";
   import bad from "@/assets/images/center/bad.png";
 
+  export interface IHighLightTreeDataObj {
+    name: string;
+    highLightTreeDataIdArr: string[];
+  }
   export interface IData {
     indicatorId: string;
     name: string;
@@ -52,6 +56,7 @@
     currentPage: number;
     pageSize: number;
     highLightTreeDataArr: IData[];
+    highLightTreeDataObj: IHighLightTreeDataObj | null;
   }
 
   const pageData = reactive<IPageData>({
@@ -60,7 +65,14 @@
     currentPage: 0, // 当前页码
     pageSize: 16, // 每页显示的指标数（8行，每行2个）
     highLightTreeDataArr: [],
+    highLightTreeDataObj: null,
   });
+  const centerData = computed(() => pageData.indicators.find(item => item.name === "达标率"));
+
+  const isShow = (indicatorId: string) => {
+    return pageData.highLightTreeDataArr.map(item => item.indicatorId).includes(indicatorId);
+  };
+
   const store = useDataStore();
   //更新当前treeData指标
   watch(
@@ -72,18 +84,17 @@
 
   //更新当前treeData需要高亮的指标
   watch(
-    () => store.highLightTreeDataIdArr,
+    () => store.highLightTreeDataObj,
     newData => {
-      pageData.highLightTreeDataArr = [];
+      pageData.highLightTreeDataObj = newData;
+
+      const { highLightTreeDataIdArr } = newData;
       // 遍历新的高亮指标ID数组
-      newData.forEach(id => {
-        // 在所有指标中查找匹配的指标ID
-        const foundIndicator = pageData.indicators.find(indicator => indicator.indicatorId === id);
-        // 如果找到了匹配的指标，将其添加到高亮指标数组中
-        if (foundIndicator) {
-          pageData.highLightTreeDataArr.push(foundIndicator);
-        }
-      });
+      pageData.highLightTreeDataArr = highLightTreeDataIdArr.reduce((acc, item) => {
+        const foundIndicator = pageData.indicators.find(indicator => indicator.indicatorId === item);
+        acc.push(foundIndicator);
+        return acc;
+      }, []);
     }
   );
 
@@ -91,7 +102,7 @@
   const displayedRows = computed(() => {
     const start = pageData.currentPage * pageData.pageSize;
     const end = start + pageData.pageSize;
-    const pageIndicators = pageData.indicators.slice(start, end);
+    const pageIndicators = (pageData.indicators || []).filter(item => item.name !== "达标率").slice(start, end);
     let rows = [];
     for (let i = 0; i < pageIndicators.length; i += 2) {
       rows.push(pageIndicators.slice(i, i + 2));
@@ -99,19 +110,22 @@
     return rows;
   });
 
-  const getIndicatorPic = (value: number) => {
-    return value > 0 ? good : bad;
+  const levelMapping: Record<string, string> = {
+    优于合理区间: good,
+    "处于/无合理区间": mid,
+    劣于合理区间: bad,
   };
 
+  const getIndicatorPic = computed(() => levelMapping[pageData.highLightTreeDataObj?.name || "优于合理区间"]);
+
   const getBackground = (indicatorId: string, innerIndex: number) => {
-    const isHighlighted = store.highLightTreeDataIdArr.includes(indicatorId) ? "-active" : "";
+    const isHighlighted = pageData.activeIndicator?.indicatorId === indicatorId ? "-active" : "";
     return innerIndex % 2 ? `bg-right${isHighlighted}` : `bg-left${isHighlighted}`;
   };
 
   function setIndicators(data: IData[]) {
     // 假设 treeData 的结构与之前的 mockData 类似
     pageData.indicators = data; // 从 Pinia store 的 treeData 获取数据并赋值
-    data?.length && selectIndicator(data?.[0]);
   }
 
   // 上一页
@@ -131,11 +145,12 @@
   //指标选中
   function selectIndicator(indicator: IData) {
     pageData.activeIndicator = indicator;
-    store.setActiveTreeData(indicator);
   }
+
   // 点击指标项时的处理函数
   function handleIndicatorClick(indicator: IData) {
     selectIndicator(indicator); // 设置当前选中的指标项
+    store.setActiveTreeData(indicator);
     store.fetchIndicatorAnalysisData(indicator.indicatorId); // 调用store的方法更新全局数据
   }
 </script>
@@ -180,11 +195,10 @@
     background: url("@/assets/images/center/left-bg.png") no-repeat center center/100% 100% !important;
   }
 
-  /* TODO: 修改背景图 */
   .bg-left-active {
     padding-right: 60px;
     justify-content: flex-end;
-    /* background: url("@/assets/images/center/left-bg.png") no-repeat center center/100% 100% !important; */
+    background: url("@/assets/images/center/left-active-bg.png") no-repeat center center/100% 100% !important;
   }
 
   .bg-right {
@@ -197,7 +211,7 @@
   .bg-right-active {
     padding-left: 60px;
     justify-content: flex-start;
-    /* background: url("@/assets/images/center/right-bg.png") no-repeat center center/100% 100% !important; */
+    background: url("@/assets/images/center/right-active-bg.png") no-repeat center center/100% 100% !important;
   }
 
   .indicator-value {

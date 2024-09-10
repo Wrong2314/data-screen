@@ -7,8 +7,13 @@
       </div>
       <div class="value-container">
         <span class="label">较上期</span>
-        <img :src="formatValue(pageData.topShowIndicator?.compareWithPeriod || '') ? up : down" alt="#" class="img" />
-        <span :class="['percent', formatValue(pageData.topShowIndicator?.compareWithPeriod || '') ? 'up' : 'down']">
+        <img
+          v-if="pageData.topShowIndicator?.trend && pageData.topShowIndicator?.trend !== '3'"
+          :src="formatValue(pageData.topShowIndicator?.trend || '', 'img')"
+          alt="#"
+          class="img"
+        />
+        <span :class="['percent', formatValue(pageData.topShowIndicator?.trend || '', 'class')]">
           {{ pageData.topShowIndicator?.compareWithPeriod }}
         </span>
       </div>
@@ -66,9 +71,18 @@
     canSelected: boolean;
   }
 
-  const formatValue = (val: string) => {
-    const numberString = val?.replace("%", "");
-    return parseFloat(numberString) > 0;
+  type TReturnVal = {
+    img: string;
+    class: string;
+  };
+
+  const valueMapping: Record<string, TReturnVal> = {
+    "1": { img: up, class: "up" },
+    "2": { img: down, class: "down" },
+  };
+
+  const formatValue = (val: string, type: "img" | "class") => {
+    return valueMapping[val]?.[type];
   };
 
   const customColorMethod = (index: number) => {
@@ -102,7 +116,7 @@
   function setIndicatorAnalysisData(data: IAnalysisData) {
     pageData.indicatorName = data.indicatorName;
     pageData.topShowIndicator = data.topShowIndicator;
-    pageData.rankInfoList = data.rankInfoList.sort((a, b) => a.rank - b.rank);
+    pageData.rankInfoList = (data.rankInfoList || []).sort((a, b) => a.rank - b.rank);
   }
 
   const handleRankInfoClick = (areaId: string) => {

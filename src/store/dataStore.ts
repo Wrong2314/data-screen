@@ -3,7 +3,7 @@ import { IAnalysisData } from "@/views/home-page/components/comp-chart/comp-left
 import { ITimeLineData } from "@/views/home-page/components/comp-chart/comp-right/home-right-bottom.vue";
 import { IBizLineData } from "@/views/home-page/components/comp-chart/comp-right/home-right-center.vue";
 import { IDetailData } from "@/views/home-page/components/comp-chart/comp-right/home-right-top.vue";
-import { IData } from "@/views/home-page/components/comp-tree/data-tree.vue";
+import { IData, IHighLightTreeDataObj } from "@/views/home-page/components/comp-tree/data-tree.vue";
 import axios from "axios";
 import { defineStore } from "pinia";
 
@@ -16,9 +16,8 @@ export const useDataStore = defineStore("data", {
     treeData: [] as IData[], //当前条件全部tree指标
     levelData: [] as ILevelDataItem[], //当前条件level信息
     indicatorDetailData: {} as IDetailData, //右上角指标详情
-    bizLineData: {} as IBizLineData[], //业务条线
-    timeLineData: {} as ITimeLineData[], //时间趋势
-    highLightTreeDataIdArr: [] as string[], //需要高亮展示的指标id
+    highLightTreeDataObj: {} as IHighLightTreeDataObj, //需要高亮展示的指标data
+    highLightTreeDataIdArr: [] as string[],
   }),
   actions: {
     setDates(start: string, end: string) {
@@ -28,8 +27,8 @@ export const useDataStore = defineStore("data", {
     setActiveTreeData(data: IData) {
       this.activeTreeData = data;
     },
-    setHighLightTreeDataArr(dataArr: string[]) {
-      this.highLightTreeDataIdArr = dataArr;
+    setHighLightTreeDataObj(dataObj: IHighLightTreeDataObj) {
+      this.highLightTreeDataObj = dataObj;
     },
     // 测试用
     async initMockData() {
@@ -118,7 +117,8 @@ export const useDataStore = defineStore("data", {
           ], //排名情况
         };
         this.treeData = [
-          { indicatorId: "aaa", name: "达标率", value: 10 },
+          { indicatorId: "000", name: "达标率", value: 10 },
+          { indicatorId: "aaa", name: "aaa", value: 10 },
           { indicatorId: "bbb", name: "bbb", value: 10 },
           { indicatorId: "ccc", name: "ccc", value: 10 },
           { indicatorId: "ddd", name: "ddd", value: 10 },
@@ -173,32 +173,7 @@ export const useDataStore = defineStore("data", {
             value: "50", //值
           }, //XX最优值
         };
-        this.bizLineData = [
-          {
-            name: "刑事", //业务条线名称
-            value: "20", //值
-            yoyValue: "10", //同比值
-            qoqValue: "10", //环比值
-          },
-          {
-            name: "民事", //业务条线名称
-            value: "30", //值
-            yoyValue: "10", //同比值
-            qoqValue: "10", //环比值
-          },
-          {
-            name: "行政", //业务条线名称
-            value: "40", //值
-            yoyValue: "10", //同比值
-            qoqValue: "10", //环比值
-          },
-          {
-            name: "其他", //业务条线名称
-            value: "50", //值
-            yoyValue: "10", //同比值
-            qoqValue: "10", //环比值
-          },
-        ];
+        this.activeTreeData = this.treeData.find(item => item.name === "达标率");
       }, 2000);
     },
     //点击tree指标更新全局数据
@@ -207,7 +182,7 @@ export const useDataStore = defineStore("data", {
         const response = await axios.get(
           `/api/v1/spzx/any_indicator_analysis?kssj=${this.startDate}&jssj=${this.endDate}&indicatorId=${indicatorId}`
         );
-        this.indicatorAnalysisData = response.data;
+        this.indicatorAnalysisData = response.data || {};
       } catch (error) {
         console.error("fetchIndicatorAnalysisData failed:", error);
       }
@@ -218,7 +193,7 @@ export const useDataStore = defineStore("data", {
         const response = await axios.get(
           `/api/v1/spzx/indicator_tree?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`
         );
-        this.treeData = response.data;
+        this.treeData = response.data || [];
       } catch (error) {
         console.error("fetchTreeData failed:", error);
       }
@@ -229,40 +204,9 @@ export const useDataStore = defineStore("data", {
         const response = await axios.get(
           `/api/v1/spzx/zxzbqk?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`
         );
-        this.levelData = response.data;
+        this.levelData = response.data || [];
       } catch (error) {
         console.error("fetchLevelData failed:", error);
-      }
-    },
-    //点击排名列表项更新全局数据
-    async fetchDetailData(indicatorId?: string, areaId?: string) {
-      try {
-        const response = await axios.get(
-          `/api/v1/spzx/indicator_info?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`
-        );
-        this.indicatorDetailData = response.data;
-      } catch (error) {
-        console.error("fetchDetailData failed:", error);
-      }
-    },
-    async fetchBizLine(indicatorId?: string, areaId?: string) {
-      try {
-        const response = await axios.get(
-          `/api/v1/spzx/business_line?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`
-        );
-        this.bizLineData = response.data;
-      } catch (error) {
-        console.error("fetchBizLine failed:", error);
-      }
-    },
-    async fetchTimeLine(indicatorId?: string, areaId?: string) {
-      try {
-        const response = await axios.get(
-          `/api/v1/spzx/time_trend?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}&indicatorId=${indicatorId}`
-        );
-        this.timeLineData = response.data;
-      } catch (error) {
-        console.error("fetchTimeLine failed:", error);
       }
     },
   },

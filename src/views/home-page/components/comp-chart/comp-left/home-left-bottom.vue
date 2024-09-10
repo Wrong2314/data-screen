@@ -13,39 +13,28 @@
 
 <script setup lang="ts">
   import { useDataStore } from "@/store/dataStore";
-  import { computed, reactive, watch } from "vue";
+  import { computed } from "vue";
 
   export interface ILevelDataItem {
     name: string;
     indicatorIds: string[];
   }
   const store = useDataStore();
-  watch(
-    () => store.levelData,
-    newData => {
-      setLevelData(newData);
-    }
-  );
-  let pageData = reactive<ILevelDataItem[]>([]);
+
+  let pageData = computed(() => store.levelData);
 
   const list = computed(() =>
-    pageData.map(item => {
+    pageData.value.map(item => {
       return { label: item.name, value: item.indicatorIds.length };
     })
   );
-  function setLevelData(data: ILevelDataItem[]) {
-    // 先清空数组
-    pageData.splice(0, pageData.length);
-    // 再添加新数据
-    data.forEach(item => pageData.push(item));
-  }
 
   const handleLevelItemClick = (value: string) => {
     // 在pageData中查找与value匹配的name属性的项
-    const selectedItem = pageData.find(item => item.name === value);
+    const selectedItem = pageData.value.find(item => item.name === value);
     if (selectedItem) {
       const indicatorIds = selectedItem.indicatorIds;
-      store.setHighLightTreeDataArr(indicatorIds);
+      store.setHighLightTreeDataObj({ name: value, highLightTreeDataIdArr: indicatorIds });
     } else {
       console.error("未找到匹配的项");
     }
