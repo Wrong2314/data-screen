@@ -5,7 +5,7 @@
         <span class="value-data value-color">{{ pageData.value }}</span>
         <span class="value-unit">%</span>
       </div>
-      <div class="label">{{ pageData.indicatorName }}</div>
+      <div class="label">{{ activeName }}</div>
       <div class="rank">
         <span class="rank-label">排名</span>
         <span class="rank-value value-color">{{ pageData.rank }}</span>
@@ -17,13 +17,13 @@
     </div>
     <div class="right">
       <div class="flex-item">
-        <div class="label">{{ pageData.avgValue.name }}</div>
+        <div class="label">{{ pageData.avgValue?.name }}</div>
         <div class="value">
           <dv-water-level-pond :config="configAvg" class="water" />
         </div>
       </div>
       <div class="flex-item">
-        <div class="label">{{ pageData.bestVo.name }}</div>
+        <div class="label">{{ pageData.bestVo?.name }}</div>
         <div class="value">
           <dv-water-level-pond :config="configMax" class="water" />
         </div>
@@ -65,8 +65,10 @@
     },
   });
   const store = useDataStore();
+  const activeName = computed(() => store.activeTreeData?.name);
+
   const configAvg = reactive({
-    data: computed(() => [pageData.avgValue.value]), // 假设这是全省平均值
+    data: computed(() => [pageData.avgValue?.value || 0]), // 假设这是全省平均值
     shape: "round",
     waveNum: 1,
     waveHeight: 10,
@@ -74,7 +76,7 @@
   });
 
   const configMax = reactive({
-    data: computed(() => [pageData.bestVo.value]), // 假设这是全省最高值
+    data: computed(() => [pageData.bestVo?.value || 0]), // 假设这是全省最高值
     shape: "round",
     waveNum: 1,
     waveHeight: 10,
@@ -122,25 +124,7 @@
     height: 100%;
     color: #ffffff;
     display: flex;
-    justify-content: space-evenly;
     align-items: center;
-  }
-  .right {
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-  }
-
-  .flex-item {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  .water {
-    width: 90px;
-    height: 90px;
   }
   .left {
     width: 250px;
@@ -173,6 +157,7 @@
 
     .label {
       font-size: 25px;
+      min-height: 25px;
       line-height: 25px;
       margin-top: 15px;
     }
@@ -195,6 +180,26 @@
     .desc {
       margin-top: 20px;
       font-weight: 200;
+    }
+  }
+
+  .right {
+    height: 200px;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+
+    .flex-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 5px;
+    }
+    .water {
+      width: 90px;
+      height: 90px;
     }
   }
 </style>

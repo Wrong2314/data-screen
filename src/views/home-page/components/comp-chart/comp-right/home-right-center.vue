@@ -1,7 +1,14 @@
 <template>
-  <div class="right-center">
+  <div id="right-center">
     <div v-for="(item, index) in list" :key="index" class="progress-container">
-      <el-progress type="circle" :percentage="+item.value" :width="90" :stroke-width="8">
+      <el-progress
+        type="circle"
+        :percentage="+item.value"
+        :width="90"
+        :stroke-width="8"
+        color="#00c6de"
+        class="custom-progress"
+      >
         <template #default>
           <span class="progress-value progress-color">{{ item.value }}</span>
           <span class="progress-unit progress-color">%</span>
@@ -9,7 +16,7 @@
       </el-progress>
 
       <div class="progress-desc">
-        <div class="progress-color">{{ item.name }}</div>
+        <div class="progress-label progress-color">{{ item.name }}</div>
         <div class="value">
           <span class="value-label">同比</span>
           <span :class="formatValue(item.yoyValue) ? 'up' : 'down'">{{ item.yoyValue }}</span>
@@ -98,18 +105,19 @@
 </script>
 
 <style scoped lang="scss">
-  .right-center {
+  #right-center {
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
   }
 
   .progress-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: calc(50% - 15px);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 
     .progress-color {
       background: linear-gradient(to bottom, #fff, #56c8ed);
@@ -136,6 +144,11 @@
       align-items: flex-start;
       padding: 10px 20px;
       position: relative;
+      letter-spacing: 2px;
+
+      .progress-label {
+        font-weight: 1000;
+      }
 
       .value-label {
         color: #fff;
@@ -167,5 +180,11 @@
 
   .down {
     color: #03f771;
+  }
+</style>
+
+<style>
+  .custom-progress .el-progress-circle__track {
+    stroke: #015ba0 !important; /* 未填充部分颜色 */
   }
 </style>

@@ -1,11 +1,5 @@
 <template>
   <div class="indicator-container">
-    <div class="indicator-list">
-      <div v-for="(item, index) in indicatorList" :key="index" class="indicator-item">
-        <img :src="item.img" alt="#" />
-        <span class="label">{{ item.label }}</span>
-      </div>
-    </div>
     <div class="indicator-display">
       <div :class="['row', index % 2 ? 'gap-long' : 'gap-short']" v-for="(row, index) in displayedRows" :key="index">
         <!-- 添加点击事件监听 -->
@@ -16,10 +10,10 @@
           @click="handleIndicatorClick(indicator)"
         >
           <div class="indicator-value">
-            <img :src="getIndicatorPic(indicator.value)" alt="" v-if="innerIndex % 2" />
+            <img :src="getIndicatorPic(indicator.value)" alt="#" v-if="innerIndex % 2" />
             <span>{{ indicator.name }}</span>
             <span>{{ indicator.value }}</span>
-            <img :src="getIndicatorPic(indicator.value)" alt="" v-if="!(innerIndex % 2)" />
+            <img :src="getIndicatorPic(indicator.value)" alt="#" v-if="!(innerIndex % 2)" />
           </div>
         </div>
       </div>
@@ -28,14 +22,9 @@
     <div class="pagination-controls">
       <img :src="leftButton" alt="#" @click="prevPage" />
       <div class="indicator-zoom">
-        <div v-if="pageData.activeIndicator">
-          <span class="label">{{ pageData.activeIndicator.name }}</span>
-          <span class="value">{{ pageData.activeIndicator.value }}</span>
-          <span class="label">%</span>
-        </div>
-        <div v-else-if="pageData.indicators.length > 0">
-          <span class="label">{{ pageData.indicators[0].name }}</span>
-          <span class="value">{{ pageData.indicators[0].value }}</span>
+        <div>
+          <span class="label">{{ pageData.activeIndicator?.name }}</span>
+          <span class="value">{{ pageData.activeIndicator?.value }}</span>
           <span class="label">%</span>
         </div>
       </div>
@@ -64,12 +53,6 @@
     pageSize: number;
     highLightTreeDataArr: IData[];
   }
-
-  const indicatorList = [
-    { label: "优于合理区间", img: good },
-    { label: "处于/无合理区间", img: mid },
-    { label: "劣于合理区间", img: bad },
-  ];
 
   const pageData = reactive<IPageData>({
     indicators: [], // 存储指标数据
@@ -101,7 +84,6 @@
           pageData.highLightTreeDataArr.push(foundIndicator);
         }
       });
-      console.log("highLightTreeDataArr", pageData.highLightTreeDataArr);
     }
   );
 
@@ -126,11 +108,10 @@
     return innerIndex % 2 ? `bg-right${isHighlighted}` : `bg-left${isHighlighted}`;
   };
 
-  // 确保在 <style> 中定义了 'bg-right-active', 'bg-left-active', 'bg-right-highlighted', 'bg-left-highlighted' 类
-
   function setIndicators(data: IData[]) {
     // 假设 treeData 的结构与之前的 mockData 类似
     pageData.indicators = data; // 从 Pinia store 的 treeData 获取数据并赋值
+    data?.length && selectIndicator(data?.[0]);
   }
 
   // 上一页
@@ -150,11 +131,11 @@
   //指标选中
   function selectIndicator(indicator: IData) {
     pageData.activeIndicator = indicator;
+    store.setActiveTreeData(indicator);
   }
   // 点击指标项时的处理函数
   function handleIndicatorClick(indicator: IData) {
     selectIndicator(indicator); // 设置当前选中的指标项
-    store.setActiveTreeData(indicator);
     store.fetchIndicatorAnalysisData(indicator.indicatorId); // 调用store的方法更新全局数据
   }
 </script>
@@ -164,22 +145,6 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-  }
-
-  .indicator-list {
-    margin-top: 35px;
-    margin-bottom: 80px;
-    color: #ffffff;
-    font-size: 18px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-
-    .indicator-item {
-      gap: 5px;
-      display: flex;
-      align-items: center;
-    }
   }
 
   .indicator-display {
@@ -247,7 +212,7 @@
   .pagination-controls {
     position: fixed;
     bottom: 63px;
-    width: 912px;
+    width: 50%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;

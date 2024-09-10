@@ -2,8 +2,6 @@
   "name": "my-vue-app",
   "private": true,
   "version": "0.0.0",
-  "author": "张坤",
-  "description": "一个标准化初始项目",
   "type": "module",
   "scripts": {
     "pnpm:": "pnpm install",

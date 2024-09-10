@@ -15,7 +15,7 @@
           <!-- 左侧列表 -->
           <div class="sides-item">
             <div class="section-small-title">
-              <span class="label"><!-- TODO：改成变量  --></span>
+              <span class="label">{{ activeName }}分析</span>
             </div>
             <div class="chart">
               <ChartLeftTop />
@@ -35,16 +35,14 @@
 
         <!-- 指标树 -->
         <div class="center">
-          <DataTree></DataTree>
+          <DataTree />
         </div>
 
         <!-- 右侧 -->
         <div class="both-sides right">
           <!-- 右侧顶部 -->
           <div class="sides-item">
-            <div class="charts">
-              <ChartRightTop />
-            </div>
+            <ChartRightTop />
           </div>
 
           <!-- 右侧中间 -->
@@ -73,7 +71,8 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from "vue";
+  import { computed, onMounted, ref } from "vue";
+  import { useDataStore } from "@/store/dataStore";
   import HomeTime from "@/views/home-page/components/comp-time/home-time.vue";
   import ChartLeftTop from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
   import ChartLeftBottom from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
@@ -81,6 +80,9 @@
   import ChartRightCenter from "@/views/home-page/components/comp-chart/comp-right/home-right-center.vue";
   import ChartRightBottom from "@/views/home-page/components/comp-chart/comp-right/home-right-bottom.vue";
   import DataTree from "@/views/home-page/components/comp-tree/data-tree.vue";
+
+  const store = useDataStore();
+  const activeName = computed(() => store.activeTreeData?.name);
 
   const screenRef = ref();
   // 获取缩放比例
@@ -162,7 +164,7 @@
 
           .chart {
             width: 100%;
-            height: calc(100% - 100px);
+            height: calc(100% - 50px);
           }
         }
 
@@ -204,6 +206,9 @@
         .center {
           position: relative;
           flex: 2;
+          display: flex;
+          align-items: center;
+          padding-bottom: 100px;
           overflow: hidden;
         }
       }
