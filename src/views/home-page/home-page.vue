@@ -89,13 +89,18 @@
   function getScale(_w = 1920, _h = 1080) {
     const ww = window.innerWidth / _w;
     const wh = window.innerHeight / _h;
-    return ww > wh ? wh : ww;
+    return wh;
   }
+
   // 封装缩放方法
   function scale() {
-    const scale = getScale();
-    screenRef.value.style.transform = `scale(${scale}) translate(-50%, -50%)`;
+    const scaleRatio = getScale();
+    const newWidth = window.innerWidth / scaleRatio;
+    screenRef.value.style.width = `${newWidth}px`;
+    screenRef.value.style.transform = `scale(${scaleRatio})`;
+    screenRef.value.style.transformOrigin = "top left";
   }
+
   onMounted(() => {
     scale();
   });
@@ -108,17 +113,13 @@
 <style lang="scss" scoped>
   .container {
     width: 100%;
-    height: 100%;
-    background-color: #001538;
+    height: 100vh;
+    overflow: hidden;
+    background: url(@/assets/images/bg.jpg) no-repeat center center;
+    background-size: 100% 100%;
 
     .screen {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform-origin: left top;
-      width: 1920px;
       height: 1080px;
-      background: url(@/assets/images/bg.jpg) no-repeat center center/100% 100%;
 
       // 头部
       header {
