@@ -2,7 +2,7 @@
   <div :id="uid" :style="myStyle"></div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { onMounted, onBeforeUnmount, ref, watch } from "vue";
   import * as echarts from "echarts";
 
@@ -22,10 +22,10 @@
   });
 
   // 因为是封装的组件，会多次调用，id不能重复，要在dom挂载之前定义好数据，
-  let uid = ref<string>("");
+  let uid = ref("");
   uid.value = `echarts-uid-${parseInt((Math.random() * 1000000).toString())}`;
 
-  const myChart = ref<any>(null);
+  const myChart = ref(null);
 
   watch(
     () => props.myOption,
@@ -37,7 +37,7 @@
   );
 
   onMounted(() => {
-    myChart.value = echarts.init(document.getElementById(uid.value) as HTMLElement);
+    myChart.value = echarts.init(document.getElementById(uid.value));
     // 在template中可以直接取props中的值，但是在script中不行，因为script是在挂载之前执行的
     myChart.value.setOption(props.myOption, {
       notMerge: true, //不和之前的option合并
@@ -57,8 +57,7 @@
 
   // 页面离开时销毁echarts实例和监听事件和定时器
   onBeforeUnmount(() => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     window.removeEventListener("resize", () => {});
-    echarts.dispose(document.getElementById(uid.value) as HTMLElement);
+    echarts.dispose(document.getElementById(uid.value));
   });
 </script>

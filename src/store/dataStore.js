@@ -1,9 +1,3 @@
-import { ILevelDataItem } from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
-import { IAnalysisData } from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
-import { ITimeLineData } from "@/views/home-page/components/comp-chart/comp-right/home-right-bottom.vue";
-import { IBizLineData } from "@/views/home-page/components/comp-chart/comp-right/home-right-center.vue";
-import { IDetailData } from "@/views/home-page/components/comp-chart/comp-right/home-right-top.vue";
-import { IData, IHighLightTreeDataObj } from "@/views/home-page/components/comp-tree/data-tree.vue";
 import axios from "axios";
 import { defineStore } from "pinia";
 
@@ -11,23 +5,23 @@ export const useDataStore = defineStore("data", {
   state: () => ({
     startDate: "2024-01-01",
     endDate: "2024-09-09",
-    activeTreeData: {} as IData, //当前选中的tree指标
-    indicatorAnalysisData: {} as IAnalysisData, //当前的xx分析信息
-    treeData: [] as IData[], //当前条件全部tree指标
-    levelData: [] as ILevelDataItem[], //当前条件level信息
-    indicatorDetailData: {} as IDetailData, //右上角指标详情
-    highLightTreeDataObj: {} as IHighLightTreeDataObj, //需要高亮展示的指标data
-    highLightTreeDataIdArr: [] as string[],
+    activeTreeData: {}, //当前选中的tree指标
+    indicatorAnalysisData: {}, //当前的xx分析信息
+    treeData: [], //当前条件全部tree指标
+    levelData: [], //当前条件level信息
+    indicatorDetailData: {}, //右上角指标详情
+    highLightTreeDataObj: {}, //需要高亮展示的指标data
+    highLightTreeDataIdArr: [], //高亮展示的指标ID数组
   }),
   actions: {
-    setDates(start: string, end: string) {
+    setDates(start, end) {
       this.startDate = start;
       this.endDate = end;
     },
-    setActiveTreeData(data: IData) {
+    setActiveTreeData(data) {
       this.activeTreeData = data;
     },
-    setHighLightTreeDataObj(dataObj: IHighLightTreeDataObj) {
+    setHighLightTreeDataObj(dataObj) {
       this.highLightTreeDataObj = dataObj;
     },
     // 测试用
@@ -177,7 +171,7 @@ export const useDataStore = defineStore("data", {
       }, 2000);
     },
     //点击tree指标更新全局数据
-    async fetchIndicatorAnalysisData(indicatorId?: string) {
+    async fetchIndicatorAnalysisData(indicatorId) {
       try {
         const response = await axios.get(
           `/api/v1/spzx/any_indicator_analysis?kssj=${this.startDate}&jssj=${this.endDate}&indicatorId=${indicatorId}`
@@ -188,7 +182,7 @@ export const useDataStore = defineStore("data", {
       }
     },
     //点击排名列表项更新全局数据
-    async fetchTreeData(areaId?: string) {
+    async fetchTreeData(areaId) {
       try {
         const response = await axios.get(
           `/api/v1/spzx/indicator_tree?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`
@@ -199,7 +193,7 @@ export const useDataStore = defineStore("data", {
       }
     },
     //点击排名列表项更新全局数据
-    async fetchLevelData(areaId?: string) {
+    async fetchLevelData(areaId) {
       try {
         const response = await axios.get(
           `/api/v1/spzx/zxzbqk?kssj=${this.startDate}&jssj=${this.endDate}&areaId=${areaId}`

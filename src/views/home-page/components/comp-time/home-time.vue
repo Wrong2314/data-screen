@@ -23,11 +23,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { onMounted, ref } from "vue";
   import dayjs from "dayjs";
   import "dayjs/locale/zh-cn";
-  import { useDataStore } from "@/store/dataStore";
+  import { useDataStore } from "@/store/dataStore.js";
 
   const dateInfo = ref(["2024-01-01", "2024-09-09"]);
   const currentTime = ref(""); // 定义一个响应式变量来存储当前时间

@@ -32,8 +32,8 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-  import { useDataStore } from "@/store/dataStore";
+<script setup>
+  import { useDataStore } from "@/store/dataStore.js";
   import { reactive, computed, watch } from "vue";
   import leftButton from "@/assets/images/center/left-button.png";
   import rightButton from "@/assets/images/center/right-button.png";
@@ -41,25 +41,7 @@
   import mid from "@/assets/images/center/mid.png";
   import bad from "@/assets/images/center/bad.png";
 
-  export interface IHighLightTreeDataObj {
-    name: string;
-    highLightTreeDataIdArr: string[];
-  }
-  export interface IData {
-    indicatorId: string;
-    name: string;
-    value: number;
-  }
-  export interface IPageData {
-    indicators: IData[];
-    activeIndicator: IData | null;
-    currentPage: number;
-    pageSize: number;
-    highLightTreeDataArr: IData[];
-    highLightTreeDataObj: IHighLightTreeDataObj | null;
-  }
-
-  const pageData = reactive<IPageData>({
+  const pageData = reactive({
     indicators: [], // 存储指标数据
     activeIndicator: null, //当前选中的指标
     currentPage: 0, // 当前页码
@@ -69,7 +51,7 @@
   });
   const centerData = computed(() => pageData.indicators.find(item => item.name === "达标率"));
 
-  const isShow = (indicatorId: string) => {
+  const isShow = indicatorId => {
     return pageData.highLightTreeDataArr.map(item => item.indicatorId).includes(indicatorId);
   };
 
@@ -110,7 +92,7 @@
     return rows;
   });
 
-  const levelMapping: Record<string, string> = {
+  const levelMapping = {
     优于合理区间: good,
     "处于/无合理区间": mid,
     劣于合理区间: bad,
@@ -118,12 +100,12 @@
 
   const getIndicatorPic = computed(() => levelMapping[pageData.highLightTreeDataObj?.name || "优于合理区间"]);
 
-  const getBackground = (indicatorId: string, innerIndex: number) => {
+  const getBackground = (indicatorId, innerIndex) => {
     const isHighlighted = pageData.activeIndicator?.indicatorId === indicatorId ? "-active" : "";
     return innerIndex % 2 ? `bg-right${isHighlighted}` : `bg-left${isHighlighted}`;
   };
 
-  function setIndicators(data: IData[]) {
+  function setIndicators(data) {
     // 假设 treeData 的结构与之前的 mockData 类似
     pageData.indicators = data; // 从 Pinia store 的 treeData 获取数据并赋值
   }
@@ -143,12 +125,12 @@
   }
 
   //指标选中
-  function selectIndicator(indicator: IData) {
+  function selectIndicator(indicator) {
     pageData.activeIndicator = indicator;
   }
 
   // 点击指标项时的处理函数
-  function handleIndicatorClick(indicator: IData) {
+  function handleIndicatorClick(indicator) {
     selectIndicator(indicator); // 设置当前选中的指标项
     store.setActiveTreeData(indicator);
     store.fetchIndicatorAnalysisData(indicator.indicatorId); // 调用store的方法更新全局数据

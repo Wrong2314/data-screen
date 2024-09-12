@@ -32,21 +32,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { computed, reactive, watch } from "vue";
-  import { useDataStore } from "@/store/dataStore";
+  import { useDataStore } from "@/store/dataStore.js";
   import axios from "axios";
   import up from "@/assets/images/right/up.png";
   import down from "@/assets/images/right/down.png";
 
-  export interface IBizLineData {
-    name: string; //业务条线名称
-    value: string; //值
-    yoyValue: string; //同比值
-    qoqValue: string; //环比值
-  }
-
-  const formatValue = (value: string) => {
+  const formatValue = value => {
     return +value > 0;
   };
 
@@ -54,7 +47,7 @@
   const startDate = computed(() => store.startDate);
   const endDate = computed(() => store.endDate);
 
-  let list = reactive<IBizLineData[]>([
+  let list = reactive([
     {
       name: "刑事", //业务条线名称
       value: "20", //值
@@ -81,7 +74,7 @@
     },
   ]);
 
-  const fetchBizLine = async (indicatorId?: string, areaId?: string) => {
+  const fetchBizLine = async (indicatorId, areaId) => {
     try {
       const { data } = await axios.get("/api/v1/spzx/business_line", {
         params: {

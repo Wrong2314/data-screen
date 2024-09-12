@@ -1,8 +1,8 @@
 <template>
   <router-view></router-view>
 </template>
-<script setup lang="ts">
-  import { useDataStore } from "./store/dataStore";
+<script setup>
+  import { useDataStore } from "@/store/dataStore.js";
 
   const store = useDataStore();
   store.initMockData();

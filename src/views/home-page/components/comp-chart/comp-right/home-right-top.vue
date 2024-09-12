@@ -34,26 +34,12 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  import { useDataStore } from "@/store/dataStore";
+<script setup>
+  import { useDataStore } from "@/store/dataStore.js";
   import { computed, reactive, watch } from "vue";
   import axios from "axios";
 
-  export interface IDetailData {
-    indicatorName: string; //指标名称
-    value: string; //指标值 最多小数点后4位
-    reasonableRange: string; //合理区间
-    rankSituations: any[];
-    avgValue: {
-      name: string; //名称
-      value: string; //值
-    }; //XX平均值
-    bestVo: {
-      name: string; //名称
-      value: string; //值
-    };
-  }
-  let pageData = reactive<IDetailData>({
+  let pageData = reactive({
     indicatorName: "", //指标名称
     value: "", //指标值 最多小数点后4位
     rankSituations: [],
@@ -92,7 +78,7 @@
   });
 
   //点击排名列表项更新全局数据
-  const fetchDetailData = async (indicatorId?: string, areaId?: string) => {
+  const fetchDetailData = async (indicatorId, areaId) => {
     try {
       const { data } = await axios.get(`/api/v1/spzx/indicator_info`, {
         params: {
@@ -128,7 +114,7 @@
     }
   };
 
-  function setDetailData(data: IDetailData) {
+  function setDetailData(data) {
     pageData.value = data.value;
     pageData.reasonableRange = data.reasonableRange;
     pageData.rankSituations = data.rankSituations;

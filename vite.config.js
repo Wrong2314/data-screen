@@ -29,7 +29,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
       //引入vue 自动注册api插件
       imports: ["vue", "vue-router", "pinia"], // 配置需要自动导入的库
-      dts: "auto-import.d.ts", // 自动引入生成api的地址
+      // dts: "auto-import.d.ts", // 自动引入生成api的地址
       eslintrc: {
         enabled: false, // 是否开启eslint
         filepath: "./.eslintrc-auto-import.json", // eslint配置文件地址
@@ -41,7 +41,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
       // 配置需要将哪些后缀类型的文件进行自动按需引入
       extensions: ["vue", "md"],
-      dts: "components.d.ts", //自动引入生成的组件的地址
+      // dts: "components.d.ts", //自动引入生成的组件的地址
     }),
   ],
   // 打包配置
@@ -74,7 +74,7 @@ export default defineConfig({
         //2 允许跨域
         changeOrigin: true,
         // 3 重写路径
-        rewrite: (path: string) => path.replace(/^\/api/, ""),
+        rewrite: path => path.replace(/^\/api/, ""),
       },
     },
   },

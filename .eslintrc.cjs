@@ -2,7 +2,6 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    // 新增
     node: true,
   },
   globals: {
@@ -16,7 +15,6 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:vue/vue3-essential",
-    "plugin:@typescript-eslint/recommended",
     "./.eslintrc-auto-import.json", //vue自动导入忽略
     // 新增，必须放在最后面
     "plugin:prettier/recommended",
@@ -25,10 +23,9 @@ module.exports = {
   parser: "vue-eslint-parser",
   parserOptions: {
     ecmaVersion: "latest",
-    parser: "@typescript-eslint/parser",
     sourceType: "module",
   },
-  plugins: ["vue", "@typescript-eslint"],
+  plugins: ["vue"],
   root: true,
   rules: {
     // 表示在逗号后面必须有空格，而在逗号前面不能有空格

@@ -2,15 +2,11 @@
   <my-charts :my-option="option"></my-charts>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { computed, ref, watch } from "vue";
-  import { useDataStore } from "@/store/dataStore";
+  import { useDataStore } from "@/store/dataStore.js";
   import axios from "axios";
-
-  export interface ITimeLineData {
-    name: string; //业务条线名称
-    value: string; //值
-  }
+  import MyCharts from "~/GlobalComponents/myCharts.vue";
 
   const store = useDataStore();
   const startDate = computed(() => store.startDate);
@@ -30,7 +26,7 @@
     ],
   ];
 
-  const fetchTimeLine = async (indicatorId?: string, areaId?: string) => {
+  const fetchTimeLine = async (indicatorId, areaId) => {
     try {
       let { data } = await axios.get("/api/v1/spzx/time_trend", {
         params: {
@@ -80,9 +76,9 @@
         ],
       };
 
-      seriesData.value = (data?.data || []).map((item: any[]) => ({
+      seriesData.value = (data?.data || []).map(item => ({
         ...item,
-        seriesData: item.data.map((dataItem: string) => +dataItem.value),
+        seriesData: item.data.map(dataItem => +dataItem.value),
       }));
       setOption();
     } catch (error) {
@@ -183,7 +179,7 @@
           },
         },
       ],
-      series: seriesData.value.map((seriesItem: any[], index: number) => ({
+      series: seriesData.value.map((seriesItem, index) => ({
         name: seriesItem.name,
         type: "line",
         showSymbol: false,

@@ -11,14 +11,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  import { useDataStore } from "@/store/dataStore";
+<script setup>
+  import { useDataStore } from "@/store/dataStore.js";
   import { computed } from "vue";
 
-  export interface ILevelDataItem {
-    name: string;
-    indicatorIds: string[];
-  }
   const store = useDataStore();
 
   let pageData = computed(() => store.levelData);
@@ -29,7 +25,7 @@
     })
   );
 
-  const handleLevelItemClick = (value: string) => {
+  const handleLevelItemClick = value => {
     // 在pageData中查找与value匹配的name属性的项
     const selectedItem = pageData.value.find(item => item.name === value);
     if (selectedItem) {

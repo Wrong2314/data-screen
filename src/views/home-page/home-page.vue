@@ -70,9 +70,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { computed, onMounted, ref } from "vue";
-  import { useDataStore } from "@/store/dataStore";
+  import { useDataStore } from "@/store/dataStore.js";
   import HomeTime from "@/views/home-page/components/comp-time/home-time.vue";
   import ChartLeftTop from "@/views/home-page/components/comp-chart/comp-left/home-left-top.vue";
   import ChartLeftBottom from "@/views/home-page/components/comp-chart/comp-left/home-left-bottom.vue";
@@ -86,8 +86,9 @@
 
   const screenRef = ref();
   // 获取缩放比例
+  // eslint-disable-next-line no-unused-vars
   function getScale(_w = 1920, _h = 1080) {
-    const ww = window.innerWidth / _w;
+    // const ww = window.innerWidth / _w;
     const wh = window.innerHeight / _h;
     return wh;
   }

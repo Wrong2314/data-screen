@@ -43,49 +43,22 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { reactive, watch } from "vue";
-  import { useDataStore } from "@/store/dataStore";
+  import { useDataStore } from "@/store/dataStore.js";
   import up from "@/assets/images/right/up.png";
   import down from "@/assets/images/right/down.png";
 
-  export interface IAnalysisData {
-    indicatorName: string;
-    topShowIndicator: ITopShowIndicator | null;
-    rankInfoList: IRankInfo[];
-  }
-
-  export interface ITopShowIndicator {
-    name: string;
-    code: string;
-    value: string;
-    compareWithPeriod: string;
-    trend: string;
-  }
-
-  export interface IRankInfo {
-    rank: number;
-    code: string;
-    name: string;
-    value: string;
-    canSelected: boolean;
-  }
-
-  type TReturnVal = {
-    img: string;
-    class: string;
+  const valueMapping = {
+    1: { img: up, class: "up" },
+    2: { img: down, class: "down" },
   };
 
-  const valueMapping: Record<string, TReturnVal> = {
-    "1": { img: up, class: "up" },
-    "2": { img: down, class: "down" },
-  };
-
-  const formatValue = (val: string, type: "img" | "class") => {
+  const formatValue = (val, type) => {
     return valueMapping[val]?.[type];
   };
 
-  const customColorMethod = (index: number) => {
+  const customColorMethod = index => {
     switch (index) {
       case 1:
         return "linear-gradient(to right, #CB3736, #E58151)";
@@ -98,7 +71,7 @@
     }
   };
 
-  let pageData = reactive<IAnalysisData>({
+  let pageData = reactive({
     indicatorName: "",
     topShowIndicator: null,
     rankInfoList: [],
@@ -113,13 +86,13 @@
     }
   );
 
-  function setIndicatorAnalysisData(data: IAnalysisData) {
+  function setIndicatorAnalysisData(data) {
     pageData.indicatorName = data.indicatorName;
     pageData.topShowIndicator = data.topShowIndicator;
     pageData.rankInfoList = (data.rankInfoList || []).sort((a, b) => a.rank - b.rank);
   }
 
-  const handleRankInfoClick = (areaId: string) => {
+  const handleRankInfoClick = areaId => {
     store.fetchTreeData(areaId);
     store.fetchLevelData(areaId);
   };

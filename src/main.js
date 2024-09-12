@@ -6,7 +6,7 @@ import DataVVue3 from "@kjgl77/datav-vue3";
 import "element-plus/dist/index.css";
 
 // 引入路由配置文件
-import router from "./router/index";
+import router from "./router/index.js";
 
 // 引入全局重置样式文件
 import "@/assets/css/reset.css";
