@@ -37,11 +37,12 @@
   );
 
   onMounted(() => {
+    if (myChart.value) {
+      myChart.value.dispose();
+    }
     myChart.value = echarts.init(document.getElementById(uid.value));
     // 在template中可以直接取props中的值，但是在script中不行，因为script是在挂载之前执行的
-    myChart.value.setOption(props.myOption, {
-      notMerge: true, //不和之前的option合并
-    });
+    myChart.value.setOption(props.myOption);
 
     // 监听页面的大小
     window.addEventListener("resize", () => {
@@ -58,6 +59,6 @@
   // 页面离开时销毁echarts实例和监听事件和定时器
   onBeforeUnmount(() => {
     window.removeEventListener("resize", () => {});
-    echarts.dispose(document.getElementById(uid.value));
+    myChart.value.dispose();
   });
 </script>

@@ -1,17 +1,19 @@
 <template>
-  <my-charts :my-option="option"></my-charts>
+  <div ref="chartContainer" style="width: 100%; height: 100%"></div>
 </template>
 
 <script setup>
   import { computed, ref, watch } from "vue";
   import { useDataStore } from "@/store/dataStore.js";
   import axios from "axios";
-  import MyCharts from "~/GlobalComponents/myCharts.vue";
+  import * as echarts from "echarts";
 
   const store = useDataStore();
   const startDate = computed(() => store.startDate);
   const endDate = computed(() => store.endDate);
 
+  let chart = null;
+  const chartContainer = ref(null);
   let option = ref({});
   const seriesData = ref([]);
   const xAxisData = computed(() => seriesData.value?.[0]?.data?.map(item => item?.name));
@@ -37,6 +39,7 @@
         },
       });
 
+      // 注意：这里保留了模拟数据，实际使用时应该删除这部分
       data = {
         data: [
           {
@@ -99,7 +102,8 @@
       tooltip: {
         trigger: "axis",
         // hover背景色
-        backgroundColor: "#282a33",
+        backgroundColor: "rgba(40, 42, 51, 0.8)",
+        borderColor: "transparent", // 去掉边框
         // hover时的竖线
         axisPointer: {
           type: "line",
@@ -130,65 +134,48 @@
         right: "8%",
         bottom: "15%",
       },
-      xAxis: [
-        {
-          type: "category",
-          boundaryGap: false,
-          axisLabel: {
-            color: "rgba(112, 151, 184, 1)",
-            fontSize: 12,
-          },
-          axisLine: {
-            show: false,
-          },
-          splitLine: {
-            show: false,
-          },
-          axisTick: {
-            show: false,
-          },
-          data: xAxisData,
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        axisLabel: {
+          color: "rgba(112, 151, 184, 1)",
+          fontSize: 12,
         },
-      ],
-      yAxis: [
-        {
-          name: "",
-          nameTextStyle: {
-            color: "#fff",
-            fontSize: 12,
-            padding: [0, 60, 0, 0],
-          },
-          // minInterval: 1,
-          type: "value",
-          axisLabel: {
-            show: true,
-            color: "rgba(112, 151, 184, 1)",
-            fontSize: 14,
-          },
-          axisLine: {
-            show: false,
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: "#999",
-            },
-          },
-          axisTick: {
-            show: false,
-          },
+        axisLine: {
+          show: false,
         },
-      ],
+        splitLine: {
+          show: false,
+        },
+        axisTick: {
+          show: false,
+        },
+        data: xAxisData,
+      },
+      yAxis: {
+        type: "value",
+        axisLabel: {
+          color: "rgba(112, 151, 184, 1)",
+          fontSize: 14,
+        },
+        axisLine: {
+          show: false,
+        },
+        splitLine: {
+          show: true,
+          lineStyle: { color: "#999" },
+        },
+        axisTick: {
+          show: false,
+        },
+      },
       series: seriesData.value.map((seriesItem, index) => ({
         name: seriesItem.name,
         type: "line",
         showSymbol: false,
         symbol: "none",
         smooth: true,
-        lineStyle: {
-          width: 1,
-          color: "#4885B3", //#C7C182
-        },
+        lineStyle: { width: 1, color: index === 0 ? "#4885B3" : "#C7C182" },
         areaStyle: {
           color: {
             type: "linear",
@@ -203,5 +190,28 @@
         data: seriesItem.seriesData,
       })),
     };
+    chart.setOption(option.value);
   };
+
+  const initChart = () => {
+    if (chart) {
+      chart.dispose();
+    }
+    chart = echarts.init(chartContainer.value);
+    chart.setOption(option.value);
+  };
+
+  const resizeHandler = () => {
+    chart && chart.resize();
+  };
+
+  onMounted(() => {
+    initChart();
+    window.addEventListener("resize", resizeHandler);
+  });
+
+  onBeforeUnmount(() => {
+    window.removeEventListener("resize", resizeHandler);
+    chart && chart.dispose();
+  });
 </script>
